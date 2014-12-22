@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="src/css/fm.css"/>
+    <style>
+        #holder {
+            height: 400px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+<textarea name="" id="" cols="30" rows="10">
+
+</textarea>
+
+<script src="bower_components/jquery/dist/jquery.min.js"></script>
+<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="bower_components/angular/angular.min.js"></script>
+<script src="bower_components/angular-messages/angular-messages.js"></script>
+<script src="bower_components/tinymce/tinymce.min.js"></script>
+
+<script src="src/js/fm.app.js"></script>
+<script src="src/js/fm.services.js"></script>
+<script src="src/js/fm.controllers.js"></script>
+<script src="src/js/fm.directives.js"></script>
+<script src="src/js/fm.boot.js"></script>
+<script src="src/js/fm.plugin.js"></script>
+
+<script>
+    tinymce.init({
+        selector: 'textarea',
+        plugins: 'fm',
+        toolbar: 'FileManager'
+    });
+
+</script>
+</body>
+</html>

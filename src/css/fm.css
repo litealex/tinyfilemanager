@@ -1,0 +1,68 @@
+.left-container {
+  height: 100%;
+  position: absolute;
+  left: 310px;
+  right: 0;
+}
+.file-manager-container {
+  height: 100%;
+  position: relative;
+}
+.file-manager-container .folders {
+  float: left;
+  overflow: auto;
+  height: 100%;
+  width: 300px;
+}
+.file-manager-container .folders .folder {
+  cursor: pointer;
+}
+.file-manager-container .folders .active-folder {
+  color: red;
+}
+.file-manager-container .folders .sub-folders {
+  margin-left: 10px;
+}
+.file-manager-container .folders .glyphicon {
+  cursor: pointer;
+}
+.file-manager-container .files {
+  height: 100%;
+  position: absolute;
+  left: 310px;
+  right: 0;
+}
+.file-manager-container .files .files-list-wrapper {
+  margin-bottom: 22px;
+  width: 100%;
+  overflow: auto;
+  position: absolute;
+  top: 37px;
+  bottom: 0;
+}
+.file-manager-container .files .files-list-wrapper .files-list {
+  padding-left: 0;
+  list-style: none;
+}
+.file-manager-container .files .files-list-wrapper .files-list .file label {
+  cursor: pointer;
+  font-weight: normal;
+}
+.file-manager-container .upload {
+  box-sizing: border-box;
+  padding: 20px;
+  border: 4px dashed #337ab7;
+  color: #fff;
+  font-size: 4em;
+  transition: 1s all;
+  height: 100%;
+  position: absolute;
+  left: 310px;
+  right: 0;
+}
+.file-manager-container .upload.hover {
+  background-color: #003300;
+}
+.file-manager-container .upload.drop {
+  background-color: #0000cc;
+}

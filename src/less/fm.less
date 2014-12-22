@@ -1,0 +1,72 @@
+.left-container {
+  height: 100%;
+  position: absolute;
+  left: 310px;
+  right: 0;
+}
+
+.file-manager-toolbal {
+
+}
+
+.file-manager-container {
+  height: 100%;
+  position: relative;
+  .folders {
+    .folder {
+      cursor: pointer;
+    }
+    .active-folder {
+      color: red;
+    }
+
+    float: left;
+    overflow: auto;
+    height: 100%;
+    width: 300px;
+    .sub-folders {
+      margin-left: 10px;
+    }
+    .glyphicon {
+      cursor: pointer;
+    }
+
+  }
+  .files {
+    .left-container;
+    .files-list-wrapper {
+      margin-bottom: 22px;
+      width: 100%;
+      overflow: auto;
+      position: absolute;
+      top: 37px;
+      bottom: 0;
+      .files-list {
+        padding-left: 0;
+        list-style: none;
+        .file label{
+          cursor: pointer;
+          font-weight: normal;
+        }
+      }
+    }
+  }
+
+  .upload {
+    box-sizing: border-box;
+    padding: 20px;
+    border: 4px dashed rgb(51, 122, 183);
+    color: #fff;
+    font-size: 4em;
+    transition: 1s all;
+    .left-container
+  }
+
+  .upload.hover {
+    background-color: #003300;
+  }
+
+  .upload.drop {
+    background-color: #0000cc;
+  }
+}

@@ -1,0 +1,125 @@
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">
+                    Управление файлами
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div id="holder">
+                    <div ng-controller="MenuController" class="file-manager-toolbar">
+                        <div class="btn-group btn-group-xs">
+
+                            <button ng-click="showUploadForm()"
+                                    ng-if="isFolderSelected"
+                                    class="btn btn-default">
+                                <i class="glyphicon glyphicon-upload"></i>
+                                Загрузить
+                            </button>
+                            <button class="btn btn-default"
+                                    ng-if="filesSelectedCount"
+                                    ng-click="removeFiles()">
+                                <i class="glyphicon glyphicon-remove"></i>
+                                Удалить файлы
+                            </button>
+                            <button class="btn btn-default"
+                                    ng-if="isFolderSelected"
+                                    ng-click="removeFolder()">
+                                <i class="glyphicon glyphicon-remove"></i>
+                                Удалить папку
+                            </button>
+                            <button class="btn btn-default"
+                                    ng-click="createFolder()">
+                                <i class="glyphicon glyphicon-plus"></i>
+                                Создать папку
+                            </button>
+                            <button class="btn btn-default"
+                                    ng-if="filesSelectedCount"
+                                    ng-click="copyFiles()">
+                                <i class="glyphicon glyphicon-share"></i>
+                                Копировать файлы
+                            </button>
+                            <button class="btn btn-default"
+                                    ng-if="filesSelectedCount"
+                                    ng-click="moveFiles()">
+                                <i class="glyphicon glyphicon-plane"></i>
+                                Переместить файлы
+                            </button>
+                            <button class="btn btn-default"
+                                    ng-click="pastFiles()"
+                                    ng-if="isCopied">
+                                <i class="glyphicon glyphicon-save"></i>
+                                Вставить
+                            </button>
+                        </div>
+                    </div>
+                    <div class="file-manager-container">
+                        <div ng-controller="FoldersController"
+                             class="folders">
+                            <div fm-folders-tree="folders"
+                                 fm-folders-load="loadFiles($path)"></div>
+                        </div>
+                        <div ng-controller="LayoutController">
+                            <div ng-if="$frame==='files'" ng-controller="FilesController"
+                                 class="files">
+                                <ol class="breadcrumb">
+                                    <li>
+                                        <a href="">
+                                            {{folders.tree.name}}
+                                        </a>
+                                    </li>
+                                    <li ng-repeat="folder in files.pathChains">
+                                        <a href="">
+                                            {{folder.name}}
+                                        </a>
+                                    </li>
+                                </ol>
+                                <div class="files-list-wrapper">
+                                    <ul class="files-list">
+                                        <li class="file" ng-repeat="file in files.list">
+                                            <label>
+                                                <input ng-model="file.selected" type="checkbox"/>
+                                                {{file.name}}
+                                            </label>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div ng-if="$frame==='upload'" ng-controller="UploadController"
+                                 fm-drop-file="upload($files)"
+                                 class="upload bg-info">
+                                <div ng-switch="$status">
+                                    <div ng-switch-when="idle">
+                                        Для загрузки перетащите сюда файлы
+                                    </div>
+                                    <div ng-switch-when="over">
+                                        Отпустите файлы
+                                    </div>
+                                    <div ng-switch-when="progress">
+                                        Идет загрузка ждите
+                                    </div>
+                                </div>
+
+                                <div fm-progress="fmUploading"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div ng-controller="InsertController"
+                 class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+                <button ng-click="insert()"
+                        ng-disabled="!filesSelectedCount"
+                        type="button"
+                        class="btn btn-primary">Вставить
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
