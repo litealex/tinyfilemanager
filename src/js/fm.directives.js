@@ -32,14 +32,24 @@
                 };
 
                 scope.$watch(attrs.fmFoldersTree, function (folder) {
-                    if (!folder)return;
+                    if (!folder) return;
+                    if (scope.prefix === undefined) {
+                        scope.prefix = folder.prefix || '/';
+                    }
+
                     scope.folder = folder;
                     if (scope.level === 1) {
-                        scope.$path = '/';
+                        scope.$path = scope.prefix + folder.name + '/';
                         scope._loadFn = attrs.fmFoldersLoad;
                     } else {
                         scope.$path = scope.$path + folder.name + '/';
                     }
+
+                    folder.fullPath = scope.$path;
+                    if (folder.selected) {
+                        scope.load();
+                    }
+
                 });
 
                 foldersSrv

@@ -67,13 +67,8 @@
                             <div ng-if="$frame==='files'" ng-controller="FilesController"
                                  class="files">
                                 <ol class="breadcrumb">
-                                    <li>
-                                        <a href="">
-                                            {{folders.tree.name}}
-                                        </a>
-                                    </li>
                                     <li ng-repeat="folder in files.pathChains">
-                                        <a href="">
+                                        <a ng-click="loadFiles($index)" href="#">
                                             {{folder.name}}
                                         </a>
                                     </li>

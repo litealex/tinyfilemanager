@@ -39,13 +39,14 @@
         this.loadFiles = function (path) {
             return $http({
                 url: fmCfg.filesUrl,
-                data: {
-                    path: path
+                params: {
+                    virtualpath: path
                 },
                 method: 'POST'
             }).then(function (res) {
                 var files = self.files;
-                files.list = res.data;
+                files.list = res.data.files;
+
                 files.list.forEach(function (file) {
                     file.fullPath = path + file.name;
                 });
@@ -71,7 +72,7 @@
             var fd = new FormData(),
                 xhr = new XMLHttpRequest();
 
-            fd.append('path', this.files.path);
+            fd.append('virtualpath', this.files.path);
             files.forEach(function (file) {
                 fd.append('files[]', file);
             });
@@ -98,10 +99,7 @@
         this.copy = function (isMove) {
             this.isMove = isMove;
             this.pathFrom = this.files.path;
-            this.buffer = this.selectedFiles
-                .map(function (file) {
-                    return file.name;
-                });
+            this.buffer = toSimpleArray(this.selectedFiles);
 
             this.broadcast('fmCopied');
         };
@@ -122,9 +120,29 @@
                 self.broadcast('fmPasted');
             });
         };
+
+        this.removeFiles = function () {
+            return $http({
+                url: fmCfg.actionsUrl,
+                method: 'POST',
+                data: {
+                    c: 'del',
+                    virtualpath: this.files.path,
+                    addInfo: toSimpleArray(this.selectedFiles)
+                }
+            });
+        };
+
         this.folderActions = function () {
             $http({});
         };
 
     }
+
+    function toSimpleArray(files) {
+        return files.map(function (item) {
+            return item.name
+        });
+    }
+
 }());

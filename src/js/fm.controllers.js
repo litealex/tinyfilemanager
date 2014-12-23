@@ -15,7 +15,7 @@
         foldersSrv.getFolders()
             .then(function (folders) {
                 $scope.folders = folders;
-                $scope.loadFiles('/');
+                folders.selected = true;
             });
 
         $scope.loadFiles = function (path) {
@@ -41,6 +41,21 @@
             foldersSrv.broadcast('fmFilesSelect',
                 foldersSrv.selectedFiles.length);
         }, true);
+        $scope.loadFiles = function (index) {
+            var prefix = $scope.folders.tree.prefix;
+            var path = prefix + '/' + $scope.files
+                .pathChains
+                .map(function (f) { return f.name; })
+                .slice(0, index+1)
+                .join('/');
+
+            console.log(path);
+
+            for (var i = 0; i <= index;i++)
+            
+            foldersSrv
+                .loadFiles(path);
+        };
     }
 
     function MenuController($scope, foldersSrv) {
@@ -62,7 +77,7 @@
         };
 
         $scope.removeFiles = function () {
-
+            foldersSrv.removeFiles();
         };
 
         $scope.removeFolder = function () {
