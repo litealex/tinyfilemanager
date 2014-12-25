@@ -16,7 +16,7 @@
         };
         this.getFolders = function () {
             return $http({
-                url: fmCfg.foldersUrl,
+                url: fmCfg.actionsUrl,
                 method: 'POST'
             }).then(function (res) {
                 self.folders.tree = res.data;
@@ -37,9 +37,10 @@
         this.selectedFiles = null;
 
         this.loadFiles = function (path) {
+            console.log(path);
             return $http({
-                url: fmCfg.filesUrl,
-                params: {
+                url: fmCfg.actionsUrl,
+                data: {
                     virtualpath: path
                 },
                 method: 'POST'
@@ -77,7 +78,7 @@
                 fd.append('files[]', file);
             });
 
-            xhr.open('POST', fmCfg.uploadUrl);
+            xhr.open('POST', fmCfg.actionsUrl);
 
             return $q(function (resolve, reject) {
                 xhr.onload = function () {
@@ -133,8 +134,16 @@
             });
         };
 
-        this.folderActions = function () {
-            $http({});
+        this.folderActions = function (action, name) {
+            return $http({
+                url: fmCfg.actionsUrl,
+                method: 'POST',
+                data: {
+                    virtualpath: this.files.path,
+                    c: action,
+                    addInfo: name
+                }
+            });
         };
 
     }
