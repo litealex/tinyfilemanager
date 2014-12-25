@@ -40,7 +40,7 @@
             console.log(path);
             return $http({
                 url: fmCfg.actionsUrl,
-                data: {
+                params: {
                     virtualpath: path
                 },
                 method: 'POST'

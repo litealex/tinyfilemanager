@@ -82,7 +82,7 @@
                                                 <i ng-if="file.selected"
                                                    class="file-icon glyphicon glyphicon-check"></i>
 
-                                                <div fm-file="{{file.name}}"></div>
+                                                <div fm-file-prefix="{{files.path}}" fm-file="{{file.name}}"></div>
                                                 <div class="file-title">
 
                                                     {{file.name}}
@@ -120,7 +120,9 @@
                 <button ng-click="insert()"
                         ng-disabled="!filesSelectedCount"
                         type="button"
-                        class="btn btn-primary">Вставить
+                        data-dismiss="modal"
+                        class="btn btn-primary">
+                    Вставить
                 </button>
             </div>
         </div>

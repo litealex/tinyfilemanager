@@ -138,8 +138,8 @@
                 if (imgExtensions.indexOf(ext) == -1) {
                     scope.file = prefix + ext + '.png';
                 } else {
-
-                    scope.file = file;
+                    console.log(attrs);
+                    scope.file = attrs.fmFilePrefix + file;
                 }
             }
         };
