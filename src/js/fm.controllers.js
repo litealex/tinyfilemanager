@@ -44,17 +44,19 @@
         $scope.loadFiles = function (index) {
             var prefix = $scope.folders.tree.prefix;
             var path = prefix + '/' + $scope.files
-                .pathChains
-                .map(function (f) { return f.name; })
-                .slice(0, index+1)
-                .join('/');
+                    .pathChains
+                    .map(function (f) {
+                        return f.name;
+                    })
+                    .slice(0, index + 1)
+                    .join('/');
 
             console.log(path);
 
-            for (var i = 0; i <= index;i++)
-            
-            foldersSrv
-                .loadFiles(path);
+            for (var i = 0; i <= index; i++)
+
+                foldersSrv
+                    .loadFiles(path);
         };
     }
 
@@ -81,11 +83,16 @@
         };
 
         $scope.removeFolder = function () {
-
+            foldersSrv
+                .folderActions('delfolder', name);
         };
 
-        $scope.createFolder = function () {
-
+        $scope.createFolder = function (name) {
+            foldersSrv
+                .folderActions('createfolder', name)
+                .then(function(){
+                    foldersSrv.getFolders();
+                });
         };
 
         $scope.copyFiles = function () {

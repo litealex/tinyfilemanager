@@ -4,7 +4,9 @@
 (function () {
     'use strict';
     angular.module('fm')
-        .directive('fmProgress', ['fmCfg',fmProgress])
+        .directive('fmFile', ['fmCfg', fmFile])
+        .directive('fmDialog', ['$compile', '$http', 'fmCfg', fmDialog])
+        .directive('fmProgress', ['fmCfg', fmProgress])
         .directive('fmDropFile', ['$parse', fmDropFile])
         .directive('stopEvent', [stopEvent])
         .directive('fmFoldersTree',
@@ -73,27 +75,27 @@
         return {
             scope: true,
             link: function (scope, element, attrs) {
-                scope.$status='idle';
+                scope.$status = 'idle';
                 element.on('dragover', function () {
                     element.addClass('hover');
-                    scope.$apply(function(){
-                        scope.$status='over';
+                    scope.$apply(function () {
+                        scope.$status = 'over';
                     });
                     return false;
                 });
 
                 element.on('dragleave', function () {
                     element.removeClass('hover');
-                    scope.$apply(function(){
-                        scope.$status='idle';
+                    scope.$apply(function () {
+                        scope.$status = 'idle';
                     });
                     return false;
                 });
 
                 element.on('drop', function (e) {
                     e.preventDefault();
-                    scope.$apply(function(){
-                        scope.$status='progress';
+                    scope.$apply(function () {
+                        scope.$status = 'progress';
                     });
                     element.removeClass('hover');
                     element.addClass('drop');
@@ -118,6 +120,55 @@
                         scope.visible = false;
                     }
 
+                });
+            }
+        };
+    }
+
+    function fmFile(fmCfg) {
+        var imgExtensions = fmCfg.imgExtensions,
+            prefix = fmCfg.extensionPrefix;
+        return {
+            scope: true,
+            templateUrl: fmCfg.templatesPrefix + 'fmFile.html',
+            link: function (scope, element, attrs) {
+                var file = attrs.fmFile,
+                    ext = (file.split('.').pop() || '').toLowerCase();
+
+                if (imgExtensions.indexOf(ext) == -1) {
+                    scope.file = prefix + ext + '.png';
+                } else {
+
+                    scope.file = file;
+                }
+            }
+        };
+    }
+
+    function fmDialog($compile) {
+        return {
+            scope: true,
+            link: function (scope, element, attrs) {
+                var isVisible = false,
+                    $template;
+                scope.close = function () {
+                    $template && $template.remove();
+                    isVisible = false;
+                };
+
+                element.on('click', function () {
+                    if (isVisible) {
+                        scope.close();
+                    } else {
+                        $template = $compile('<div class="fm-dialog">' +
+                        $(attrs.fmDialog).html()
+                        + '</div>')(scope).css(element.offset());
+                        element.after($template).removeClass('modal-open');
+                        isVisible = true;
+                    }
+                    $template.on('submit',function(){
+                        scope.close();
+                    });
                 });
             }
         };

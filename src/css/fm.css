@@ -44,9 +44,34 @@
   padding-left: 0;
   list-style: none;
 }
+.file-manager-container .files .files-list-wrapper .files-list .file {
+  display: inline-block;
+}
+.file-manager-container .files .files-list-wrapper .files-list .file .file-icon {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.file-manager-container .files .files-list-wrapper .files-list .file .file-preview {
+  width: 100px;
+}
+.file-manager-container .files .files-list-wrapper .files-list .file .file-title {
+  display: inline-block;
+  width: 100%;
+  overflow: hidden;
+  height: 20px;
+  position: absolute;
+  background-color: #000011;
+  color: #fff;
+}
 .file-manager-container .files .files-list-wrapper .files-list .file label {
+  padding: 0 0 20px 0;
+  position: relative;
+  border: 1px solid #ccc;
+  margin: 2px;
   cursor: pointer;
   font-weight: normal;
+  width: 110px;
 }
 .file-manager-container .upload {
   box-sizing: border-box;
@@ -65,4 +90,14 @@
 }
 .file-manager-container .upload.drop {
   background-color: #0000cc;
+}
+.fm-dialog {
+  position: absolute;
+  width: 250px;
+  z-index: 2000;
+  border: 1px solid #c2ccd1;
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 1px 1px 10px #ccc;
 }

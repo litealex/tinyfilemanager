@@ -4,10 +4,17 @@ var express = require('express'),
 
 app.use(express.static(__dirname));
 app.use(bodyParser.json());
-app.post('/folders', function (req, res) {
-    res.send({
-        name: 'Root',
-        folders: [
+
+app.post('/files', function (req, res) {
+    var vp = req.body.virtualpath,
+        raw = 'Dropdowns are automatically positioned via CSS within the normal flow of the document. This means dropdowns may be cropped by parents with certain overflow properties or appear out of bounds of the viewport. Address these issues on your own as they arise.',
+        files = raw.split(' ').map(function (file) {
+            return {
+                name: file + '.mp3',
+                size: file.length
+            }
+        }),
+        folders = [
             {
                 name: 'Img',
                 folders: [{
@@ -41,21 +48,18 @@ app.post('/folders', function (req, res) {
                 }]
             }
 
-        ]
-    });
-});
+        ];
 
 
-app.post('/files', function (req, res) {
-    var raw = 'Dropdowns are automatically positioned via CSS within the normal flow of the document. This means dropdowns may be cropped by parents with certain overflow properties or appear out of bounds of the viewport. Address these issues on your own as they arise.',
-        files = raw.split(' ').map(function (file) {
-            return {
-                name: file + '.jpg',
-                size: file.length
-            }
+    if (vp === undefined) {
+        return res.send({
+            name: 'Root',
+            prefix: '',
+            folders: folders
         });
-    console.log(req.body);
-    res.send(files);
+    }
+
+    res.send({files: files});
 });
 
 app.get('/', function (req, res) {

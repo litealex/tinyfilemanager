@@ -8,11 +8,10 @@
                 return editor;
             })
             .value('fmCfg', {
-                foldersUrl: '/SimpleEditor.ashx',
-                filesUrl: '/SimpleEditor.ashx',
-                uploadUrl: '/SimpleEditor.ashx?c=upload&',
-                actionsUrl: '/SimpleEditor.ashx',
-                templatesPrefix: '/src/templates/'
+                actionsUrl: '/files',
+                templatesPrefix: '/src/templates/',
+                imgExtensions: ['jpg', 'gif', 'png', 'jpeg', 'bmp', 'svg'],
+                extensionPrefix: '/src/img/512px/'
             });
         angular.bootstrap(holderElement, ['fm']);
     };

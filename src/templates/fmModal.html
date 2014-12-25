@@ -11,20 +11,13 @@
             </div>
             <div class="modal-body">
                 <div id="holder">
-                    <div ng-controller="MenuController" class="file-manager-toolbar">
+                    <div ng-controller="MenuController"
+                         class="file-manager-toolbar ">
                         <div class="btn-group btn-group-xs">
-
-                            <button ng-click="showUploadForm()"
-                                    ng-if="isFolderSelected"
-                                    class="btn btn-default">
-                                <i class="glyphicon glyphicon-upload"></i>
-                                Загрузить
-                            </button>
                             <button class="btn btn-default"
-                                    ng-if="filesSelectedCount"
-                                    ng-click="removeFiles()">
-                                <i class="glyphicon glyphicon-remove"></i>
-                                Удалить файлы
+                                    fm-dialog="#createFolder">
+                                <i class="glyphicon glyphicon-plus"></i>
+                                Создать папку
                             </button>
                             <button class="btn btn-default"
                                     ng-if="isFolderSelected"
@@ -32,10 +25,19 @@
                                 <i class="glyphicon glyphicon-remove"></i>
                                 Удалить папку
                             </button>
+
+                            <button ng-click="showUploadForm()"
+                                    ng-if="isFolderSelected"
+                                    class="btn btn-primary">
+                                <i class="glyphicon glyphicon-upload"></i>
+                                Загрузить
+                            </button>
+
                             <button class="btn btn-default"
-                                    ng-click="createFolder()">
-                                <i class="glyphicon glyphicon-plus"></i>
-                                Создать папку
+                                    ng-if="filesSelectedCount"
+                                    ng-click="removeFiles()">
+                                <i class="glyphicon glyphicon-remove"></i>
+                                Удалить файлы
                             </button>
                             <button class="btn btn-default"
                                     ng-if="filesSelectedCount"
@@ -76,9 +78,15 @@
                                 <div class="files-list-wrapper">
                                     <ul class="files-list">
                                         <li class="file" ng-repeat="file in files.list">
-                                            <label>
-                                                <input ng-model="file.selected" type="checkbox"/>
-                                                {{file.name}}
+                                            <label ng-click="file.selected = !file.selected">
+                                                <i ng-if="file.selected"
+                                                   class="file-icon glyphicon glyphicon-check"></i>
+
+                                                <div fm-file="{{file.name}}"></div>
+                                                <div class="file-title">
+
+                                                    {{file.name}}
+                                                </div>
                                             </label>
                                         </li>
                                     </ul>
@@ -117,4 +125,19 @@
             </div>
         </div>
     </div>
+    <script id="createFolder" type="text/html">
+        <form ng-submit="createFolder(folderName)">
+            <div class="form-group">
+                <label for="folder">Название папки</label>
+                <input ng-model="folderName"
+                       required
+                       type="text" class="form-control"
+                       id="folder" placeholder="Название папки">
+            </div>
+            <button ng-click="close()"
+                    type="button"
+                    class="btn btn-xs btn-default">Отмена</button>
+            <button type="submit" class="btn btn-xs btn-primary">Создать</button>
+        </form>
+    </script>
 </div>
