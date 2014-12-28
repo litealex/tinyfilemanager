@@ -5,8 +5,6 @@
     'use strict';
     angular.module('fm')
         .controller('InsertController', ['$scope', 'editor', 'foldersSrv', InsertController])
-        .controller('LayoutController', ['$scope', LayoutController])
-        .controller('UploadController', ['$scope', 'foldersSrv', UploadController])
         .controller('MenuController', ['$scope', 'foldersSrv', MenuController])
         .controller('FilesController', ['$scope', 'filterFilter', 'foldersSrv', FilesController])
         .controller('FoldersController', ['$scope', 'foldersSrv', FoldersController]);
@@ -15,7 +13,7 @@
         foldersSrv.getFolders()
             .then(function (folders) {
                 $scope.folders = folders;
-                folders.selected = true;
+                folders.tree.selected = true;
             });
 
         $scope.loadFiles = function (path) {
@@ -51,12 +49,21 @@
                     .slice(0, index + 1)
                     .join('/');
 
-            console.log(path);
-
             for (var i = 0; i <= index; i++)
 
                 foldersSrv
                     .loadFiles(path);
+        };
+
+        $scope.upload = function (files) {
+            console.log(444);
+            foldersSrv.upload(files, function (event) {
+                $scope.$broadcast('fmUploading', event.loaded / event.total * 100);
+            }).then(function () {
+                foldersSrv.refreshFolder().then(function () {
+                    $scope.$broadcast('fmEndUploading');
+                });
+            });
         };
     }
 
@@ -68,7 +75,7 @@
             $scope.filesSelectedCount = count;
         });
         $scope.$on('fmCopied', function () {
-            $scope.isCopied = true
+            $scope.isCopied = true;
         });
         $scope.$on('fmPasted', function () {
             $scope.isCopied = false;
@@ -84,15 +91,13 @@
 
         $scope.removeFolder = function () {
             foldersSrv
-                .folderActions('delfolder', name);
+                .folderActions('delfolder');
         };
 
         $scope.createFolder = function (name) {
             foldersSrv
-                .folderActions('createfolder', name)
-                .then(function(){
-                    foldersSrv.getFolders();
-                });
+                .folderActions('createfolder', name);
+
         };
 
         $scope.copyFiles = function () {
@@ -106,26 +111,11 @@
         $scope.pastFiles = function () {
             foldersSrv.past();
         };
+
+
     }
 
-    function UploadController($scope, foldersSrv) {
-        $scope.upload = function (files) {
-            foldersSrv.upload(files, function (event) {
-                $scope.$broadcast('fmUploading', event.loaded / event.total * 100);
-            }).then(function () {
-                foldersSrv.refreshFolder().then(function () {
-                    foldersSrv.changeFrame('files');
-                });
-            });
-        };
-    }
 
-    function LayoutController($scope) {
-        $scope.$frame = 'files';
-        $scope.$on('fmChangeFrame', function (event, frame) {
-            $scope.$frame = frame;
-        });
-    }
 
     function InsertController($scope, editor, foldersSrv) {
         $scope.$on('fmFilesSelect', function (event, count) {
@@ -135,8 +125,8 @@
         $scope.insert = function () {
             var imgs = [];
             foldersSrv.selectedFiles.forEach(function (file) {
-                imgs.push('<img src="' + file.fullPath
-                + '" alt="' + file.name + '"/>')
+                imgs.push('<img src="' + file.fullPath +
+                '" alt="' + file.name + '"/>');
             });
 
             editor.insertContent(imgs.join(''));

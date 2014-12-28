@@ -7,13 +7,13 @@
            stop-event="click"
            ng-click="toggleCollapse()"
            ng-class="{
-           'glyphicon-plus': !isHide,
-           'glyphicon-minus': isHide
+           'glyphicon-plus': isHide,
+           'glyphicon-minus': !isHide
            }"
            class="glyphicon"></i>
     </span>
 
-    <div ng-if="isHide" ng-repeat="subFolder in folder.folders"
+    <div ng-if="!isHide" ng-repeat="subFolder in folder.folders"
          fm-folders-tree="subFolder"
          class="sub-folders"></div>
 </div>

@@ -26,12 +26,12 @@
                                 Удалить папку
                             </button>
 
-                            <button ng-click="showUploadForm()"
-                                    ng-if="isFolderSelected"
-                                    class="btn btn-primary">
-                                <i class="glyphicon glyphicon-upload"></i>
-                                Загрузить
-                            </button>
+                            <!--<button ng-click="showUploadForm()"-->
+                                    <!--ng-if="isFolderSelected"-->
+                                    <!--class="btn btn-primary">-->
+                                <!--<i class="glyphicon glyphicon-upload"></i>-->
+                                <!--Загрузить-->
+                            <!--</button>-->
 
                             <button class="btn btn-default"
                                     ng-if="filesSelectedCount"
@@ -62,55 +62,34 @@
                     <div class="file-manager-container">
                         <div ng-controller="FoldersController"
                              class="folders">
-                            <div fm-folders-tree="folders"
+                            <div fm-folders-tree="folders.tree"
                                  fm-folders-load="loadFiles($path)"></div>
                         </div>
-                        <div ng-controller="LayoutController">
-                            <div ng-if="$frame==='files'" ng-controller="FilesController"
-                                 class="files">
-                                <ol class="breadcrumb">
-                                    <li ng-repeat="folder in files.pathChains">
-                                        <a ng-click="loadFiles($index)" href="#">
-                                            {{folder.name}}
-                                        </a>
+                        <div ng-controller="FilesController" class="files">
+                            <ol class="breadcrumb">
+                                <li ng-repeat="folder in files.pathChains">
+                                    <a ng-click="loadFiles($index)" href="#">
+                                        {{folder.name}}
+                                    </a>
+                                </li>
+                            </ol>
+                            <div class="files-list-wrapper"
+                                 fm-drop-files="upload($files)">
+                                <ul class="files-list">
+                                    <li class="file" ng-repeat="file in files.list">
+                                        <label ng-click="file.selected = !file.selected">
+                                            <i ng-if="file.selected"
+                                               class="file-icon glyphicon glyphicon-check"></i>
+
+                                            <div fm-file-prefix="{{files.path}}" fm-file="{{file.name}}"></div>
+                                            <div class="file-title">
+                                                {{file.name}}
+                                            </div>
+                                        </label>
                                     </li>
-                                </ol>
-                                <div class="files-list-wrapper">
-                                    <ul class="files-list">
-                                        <li class="file" ng-repeat="file in files.list">
-                                            <label ng-click="file.selected = !file.selected">
-                                                <i ng-if="file.selected"
-                                                   class="file-icon glyphicon glyphicon-check"></i>
-
-                                                <div fm-file-prefix="{{files.path}}" fm-file="{{file.name}}"></div>
-                                                <div class="file-title">
-
-                                                    {{file.name}}
-                                                </div>
-                                            </label>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div ng-if="$frame==='upload'" ng-controller="UploadController"
-                                 fm-drop-file="upload($files)"
-                                 class="upload bg-info">
-                                <div ng-switch="$status">
-                                    <div ng-switch-when="idle">
-                                        Для загрузки перетащите сюда файлы
-                                    </div>
-                                    <div ng-switch-when="over">
-                                        Отпустите файлы
-                                    </div>
-                                    <div ng-switch-when="progress">
-                                        Идет загрузка ждите
-                                    </div>
-                                </div>
-
-                                <div fm-progress="fmUploading"></div>
+                                </ul>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -138,7 +117,8 @@
             </div>
             <button ng-click="close()"
                     type="button"
-                    class="btn btn-xs btn-default">Отмена</button>
+                    class="btn btn-xs btn-default">Отмена
+            </button>
             <button type="submit" class="btn btn-xs btn-primary">Создать</button>
         </form>
     </script>

@@ -14,7 +14,7 @@
                         fileManager(element[0], editor, {});
                         element.modal();
                     }
-                })
+                });
             }
         });
     });

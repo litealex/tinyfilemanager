@@ -1,9 +1,10 @@
 (function () {
     'use strict';
     angular.module('fm')
-        .service('foldersSrv', ['$rootScope', '$http', '$q', '$templateCache', 'fmCfg', foldersSrv]);
+        .service('foldersSrv', ['$rootScope', '$http',
+            '$q', '$templateCache', 'fmCfg', FoldersSrv]);
 
-    function foldersSrv($rootScope, $http, $q, $templateCache, fmCfg) {
+    function FoldersSrv($rootScope, $http, $q, $templateCache, fmCfg) {
         var self = this;
         this.getTemplate = function (url) {
             return $http({
@@ -12,7 +13,7 @@
                 method: 'get'
             }).then(function (res) {
                 return res.data;
-            })
+            });
         };
         this.getFolders = function () {
             return $http({
@@ -20,9 +21,10 @@
                 method: 'POST'
             }).then(function (res) {
                 self.folders.tree = res.data;
-                return res.data;
+                return self.folders;
             });
         };
+
         /**
          * list - список файлов
          * path - текущая директория
@@ -37,11 +39,10 @@
         this.selectedFiles = null;
 
         this.loadFiles = function (path) {
-            console.log(path);
             return $http({
                 url: fmCfg.actionsUrl,
-                params: {
-                    virtualpath: path
+                data: {
+                    path: path
                 },
                 method: 'POST'
             }).then(function (res) {
@@ -60,7 +61,7 @@
                     .map(function (p) {
                         return {
                             name: p
-                        }
+                        };
                     });
 
                 $rootScope.$broadcast('fmFolderSelected');
@@ -73,7 +74,7 @@
             var fd = new FormData(),
                 xhr = new XMLHttpRequest();
 
-            fd.append('virtualpath', this.files.path);
+            fd.append('path', this.files.path);
             files.forEach(function (file) {
                 fd.append('files[]', file);
             });
@@ -108,10 +109,8 @@
             return $http({
                 url: fmCfg.actionsUrl,
                 method: 'POST',
-                params: {
-                    c: this.isMove ? 'move' : 'copy'
-                },
                 data: {
+                    c: this.isMove ? 'move' : 'copy',
                     pathFrom: this.pathFrom,
                     pathTo: this.files.path,
                     files: this.buffer
@@ -128,8 +127,8 @@
                 method: 'POST',
                 data: {
                     c: 'del',
-                    virtualpath: this.files.path,
-                    addInfo: toSimpleArray(this.selectedFiles)
+                    path: this.files.path,
+                    files: toSimpleArray(this.selectedFiles)
                 }
             });
         };
@@ -139,18 +138,19 @@
                 url: fmCfg.actionsUrl,
                 method: 'POST',
                 data: {
-                    virtualpath: this.files.path,
+                    path: this.files.path,
                     c: action,
-                    addInfo: name
+                    name: name
                 }
+            }).then(function(){
+                self.getFolders();
             });
         };
-
     }
 
     function toSimpleArray(files) {
         return files.map(function (item) {
-            return item.name
+            return item.name;
         });
     }
 

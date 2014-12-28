@@ -1,65 +1,82 @@
 var express = require('express'),
     bodyParser = require('body-parser'),
-    app = express();
+    rimraf = require('rimraf'),
+    fs = require('fs'),
+    app = express(),
+    prefix = 'upload',
+    getFoldersTree = function (prefix, tree, callback) {
+        fs.readdir('./' + prefix, function (err, folders) {
+            var len, i, folderName, folder;
+            tree.name = prefix.split('/').pop();
+            tree.folders = [];
+
+            folders = folders.filter(function (f) {
+                return fs.statSync('./' + prefix + '/' + f).isDirectory();
+            });
+
+            len = folders.length;
+
+            if (!len) {
+                callback(tree);
+            }
+
+            for (i = 0; i < len; i++) {
+                folderName = folders[i];
+                folder = {};
+                tree.folders.push(folder);
+                getFoldersTree(prefix + '/' + folderName, folder, function () {
+                    i--;
+                    if (i === 0) {
+                        callback(tree);
+                    }
+                });
+            }
+        });
+    };
 
 app.use(express.static(__dirname));
 app.use(bodyParser.json());
 
+
 app.post('/files', function (req, res) {
-    var vp = req.body.virtualpath,
-        raw = 'Dropdowns are automatically positioned via CSS within the normal flow of the document. This means dropdowns may be cropped by parents with certain overflow properties or appear out of bounds of the viewport. Address these issues on your own as they arise.',
-        files = raw.split(' ').map(function (file) {
-            return {
-                name: file + '.mp3',
-                size: file.length
-            }
-        }),
-        folders = [
-            {
-                name: 'Img',
-                folders: [{
-                    name: 'animal',
-                    folders: []
-                }, {
-                    name: 'birds',
-                    folders: []
-                }, {
-                    name: 'cities',
-                    folders: [
-                        {name: 'Moscow', folders: []},
-                        {name: 'Omsk', folders: []},
-                        {name: 'Krasnodar', folders: []}
-                    ]
-                }]
-            },
-            {
-                name: 'child2',
-                folders: [{
-                    name: 'child 2.1',
-                    folders: []
-                }, {
-                    name: 'child 2.2',
-                    folders: [
-                        {
-                            name: 'child2.2.1',
-                            folders: []
-                        }
-                    ]
-                }]
-            }
-
-        ];
-
+    var body = req.body,
+        vp = body.path;
 
     if (vp === undefined) {
-        return res.send({
-            name: 'Root',
-            prefix: '',
-            folders: folders
+        getFoldersTree(prefix, {prefix: '/'}, function (tree) {
+            res.send(tree);
         });
+    } else {
+        switch ((body.c || '').toLowerCase()) {
+            case 'createfolder':
+                createFolder(vp, body.name, function () {
+                    res.sendStatus(200);
+                });
+                break;
+            case 'delfolder':
+                deleteFolder(vp, body.name, function () {
+                    res.sendStatus(200);
+                });
+                break;
+            case 'del':
+                deleteFiles(vp, body.files, function () {
+                    res.sendStatus(200);
+                });
+                break;
+            case 'copy':
+                break;
+            case 'move':
+                break;
+            default :
+                readFiles(body.path, function (files) {
+                    res.send({files: files});
+                });
+
+        }
+
+
     }
 
-    res.send({files: files});
 });
 
 app.get('/', function (req, res) {
@@ -69,3 +86,32 @@ app.get('/', function (req, res) {
 app.listen(3000, function (req, res) {
 
 });
+
+function createFolder(vp, name, callback) {
+    console.log('22222');
+    console.log(arguments);
+    fs.mkdir('.' + vp + name, callback);
+}
+
+function deleteFolder(vp, name, callback) {
+    rimraf('.' + vp, callback);
+}
+
+function readFiles(vp, callback) {
+    fs.readdir('.' + vp, function (err, infos) {
+        callback(infos.filter(function (f) {
+            return !fs.statSync('./' + vp + '/' + f).isDirectory();
+        }).map(function (f) {
+            return {name: f};
+        }))
+    });
+}
+
+function deleteFiles(vp, files, callback) {
+    var len = files.length,
+        i;
+    for (i = 0; i < len; i++) {
+        fs.unlinkSync('.' + vp + '/' + files[i]);
+    }
+    callback();
+}

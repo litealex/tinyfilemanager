@@ -7,7 +7,7 @@
         .directive('fmFile', ['fmCfg', fmFile])
         .directive('fmDialog', ['$compile', '$http', 'fmCfg', fmDialog])
         .directive('fmProgress', ['fmCfg', fmProgress])
-        .directive('fmDropFile', ['$parse', fmDropFile])
+        .directive('fmDropFiles', ['$parse', '$compile', fmDropFiles])
         .directive('stopEvent', [stopEvent])
         .directive('fmFoldersTree',
         ['$compile', '$parse', 'fmCfg', 'foldersSrv', fmFoldersTree]);
@@ -19,18 +19,17 @@
             scope: true,
             link: function (scope, element, attrs) {
                 scope.level = (scope.level || 0) + 1;
-                scope.isHide = scope.level < 2;
+                scope.isHide = false; //scope.level < 2;
 
                 scope.toggleCollapse = function () {
                     scope.isHide = !scope.isHide;
                 };
                 scope.load = function () {
-                    selectedFolder = scope.folder;
-                    $parse(scope._loadFn)(scope)
+                    selectedFolder = scope.folder.fullPath;
+                    $parse(scope._loadFn)(scope);
                 };
-
                 scope.isSelected = function () {
-                    return scope.folder === selectedFolder;
+                    return scope.folder.fullPath === selectedFolder;
                 };
 
                 scope.$watch(attrs.fmFoldersTree, function (folder) {
@@ -68,42 +67,49 @@
             element.on(attrs.stopEvent, function (e) {
                 e.stopPropagation();
             });
-        }
+        };
     }
 
-    function fmDropFile($parse) {
+    function fmDropFiles($parse, $compile) {
+        var $template = angular.element('<div class="upload bg-info">' +
+        '<i class="glyphicon glyphicon-upload"></i>' +
+        '<div fm-progress="fmUploading"></div>' +
+        '</div>');
         return {
             scope: true,
             link: function (scope, element, attrs) {
-                scope.$status = 'idle';
+                var isOver = false,
+                    leave = function () {
+                        if (isOver) {
+                            $template.remove();
+                            isOver = false;
+                        }
+                        return false;
+                    };
+                $compile($template)(scope);
+
                 element.on('dragover', function () {
-                    element.addClass('hover');
-                    scope.$apply(function () {
-                        scope.$status = 'over';
-                    });
+                    if (!isOver) {
+                        var css = {
+                            width: element.width(),
+                            height: element[0].scrollHeight
+                        };
+                        element.append($template.css(css)
+                            .on('dragleave', leave));
+                        isOver = true;
+                    }
                     return false;
-                });
-
-                element.on('dragleave', function () {
-                    element.removeClass('hover');
-                    scope.$apply(function () {
-                        scope.$status = 'idle';
-                    });
-                    return false;
-                });
-
-                element.on('drop', function (e) {
+                }).on('drop', function (e) {
                     e.preventDefault();
-                    scope.$apply(function () {
-                        scope.$status = 'progress';
-                    });
-                    element.removeClass('hover');
-                    element.addClass('drop');
                     scope.$files = Array.prototype.slice.call(e.originalEvent.dataTransfer.files);
-                    $parse(attrs.fmDropFile)(scope);
+                    scope.$apply(function () {
+                        $parse(attrs.fmDropFiles)(scope);
+                    });
                 });
+
+                scope.$on('fmEndUploading', leave);
             }
-        }
+        };
     }
 
 
@@ -138,7 +144,6 @@
                 if (imgExtensions.indexOf(ext) == -1) {
                     scope.file = prefix + ext + '.png';
                 } else {
-                    console.log(attrs);
                     scope.file = attrs.fmFilePrefix + file;
                 }
             }
@@ -152,7 +157,9 @@
                 var isVisible = false,
                     $template;
                 scope.close = function () {
-                    $template && $template.remove();
+                    if ($template) {
+                        $template.remove();
+                    }
                     isVisible = false;
                 };
 
@@ -161,12 +168,12 @@
                         scope.close();
                     } else {
                         $template = $compile('<div class="fm-dialog">' +
-                        $(attrs.fmDialog).html()
-                        + '</div>')(scope).css(element.offset());
+                        $(attrs.fmDialog).html() +
+                        '</div>')(scope).css(element.offset());
                         element.after($template).removeClass('modal-open');
                         isVisible = true;
                     }
-                    $template.on('submit',function(){
+                    $template.on('submit', function () {
                         scope.close();
                     });
                 });
