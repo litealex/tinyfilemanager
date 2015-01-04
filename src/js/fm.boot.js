@@ -8,7 +8,7 @@
                 return editor;
             })
             .value('fmCfg', {
-                actionsUrl: '/files',
+                actionsUrl: '/SimpleEditor.ashx',
                 templatesPrefix: '/src/templates/',
                 getTemplateUrl: function (template) {
                     return this.templatesPrefix + template + '.html';

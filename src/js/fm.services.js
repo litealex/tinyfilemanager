@@ -56,8 +56,8 @@
         this.loadFiles = function (path) {
             return $http({
                 url: fmCfg.actionsUrl,
-                data: {
-                    path: path
+                params: {
+                    virtualpath: path
                 },
                 method: 'POST'
             }).then(function (res) {
@@ -89,7 +89,8 @@
             var fd = new FormData(),
                 xhr = new XMLHttpRequest();
 
-            fd.append('path', this.files.path);
+            fd.append('virtualpath', this.files.path);
+            fd.append('c', 'upload');
             files.forEach(function (file) {
                 fd.append('files[]', file);
             });
@@ -123,11 +124,13 @@
             return $http({
                 url: fmCfg.actionsUrl,
                 method: 'POST',
-                data: {
+                params: {
                     c: this.isMove ? 'move' : 'copy',
-                    pathFrom: this.pathFrom,
-                    pathTo: this.files.path,
-                    files: this.buffer
+                    virtualpath: this.files.path,
+                    addInfo: JSON.stringify({
+                        files: this.buffer,
+                        from: this.pathFrom
+                    })
                 }
             }).then(function () {
                 self.isMove = null;
@@ -138,10 +141,10 @@
             return $http({
                 url: fmCfg.actionsUrl,
                 method: 'POST',
-                data: {
+                params: {
                     c: 'del',
-                    path: this.files.path,
-                    files: toSimpleArray(this.selectedFiles)
+                    virtualpath: this.files.path,
+                    addInfo: JSON.stringify(toSimpleArray(this.selectedFiles))
                 }
             });
         };
@@ -149,10 +152,9 @@
             return $http({
                 url: fmCfg.actionsUrl,
                 method: 'POST',
-                data: {
-                    path: this.files.path,
-                    c: action,
-                    name: name
+                params: {
+                    virtualpath: this.files.path + (name||''),
+                    c: action
                 }
             }).then(function () {
                 self.getFolders();
