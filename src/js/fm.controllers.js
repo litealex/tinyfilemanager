@@ -98,7 +98,10 @@
         };
 
         $scope.removeFiles = function () {
-            foldersSrv.removeFiles();
+            foldersSrv.removeFiles()
+                .then(function(){
+                    foldersSrv.refreshFolder();
+                });
         };
 
         $scope.removeFolder = function () {
