@@ -57,7 +57,7 @@
                         })
                         .slice(0, index + 1)
                         .join('/') + '/';
-                foldersSrv.broadcast('fmChangePath', path)
+            foldersSrv.broadcast('fmChangePath', path);
         };
 
         $scope.upload = function (files) {
@@ -99,19 +99,31 @@
 
         $scope.removeFiles = function () {
             foldersSrv.removeFiles()
-                .then(function(){
+                .then(function () {
                     foldersSrv.refreshFolder();
                 });
         };
 
         $scope.removeFolder = function () {
             foldersSrv
-                .folderActions('delfolder');
+                .folderActions('delfolder')
+                .then(function(){
+                    var chains = foldersSrv.files.pathChains;
+                    chains.pop();
+                    foldersSrv.broadcast('fmChangePath',
+                        '/' + chains.map(function (f) {
+                            return f.name;
+                        }).join('/') + '/');
+                });
         };
 
         $scope.createFolder = function (name) {
             foldersSrv
-                .folderActions('createfolder', name);
+                .folderActions('createfolder', name)
+                .then(function () {
+                    foldersSrv.broadcast('fmChangePath',
+                        foldersSrv.files.path + name + '/');
+                });
 
         };
 
