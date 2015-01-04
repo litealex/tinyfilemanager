@@ -47,7 +47,7 @@
 
                     scope.folder = folder;
                     if (scope.level === 1) {
-                        scope.$fullPath =  '/';
+                        scope.$fullPath =  scope.prefix + folder.name + '/';
                     } else {
                         scope.$fullPath = scope.$fullPath + folder.name + '/';
                     }
