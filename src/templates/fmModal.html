@@ -12,58 +12,16 @@
             <div class="modal-body">
                 <div id="holder">
                     <div ng-controller="MenuController"
-                         class="file-manager-toolbar ">
-                        <div class="btn-group btn-group-xs">
-                            <button class="btn btn-default"
-                                    fm-dialog="#createFolder">
-                                <i class="glyphicon glyphicon-plus"></i>
-                                Создать папку
-                            </button>
-                            <button class="btn btn-default"
-                                    ng-if="isFolderSelected"
-                                    ng-click="removeFolder()">
-                                <i class="glyphicon glyphicon-remove"></i>
-                                Удалить папку
-                            </button>
+                         class="file-manager-toolbar "
+                            ng-include="menuUrl">
 
-                            <!--<button ng-click="showUploadForm()"-->
-                                    <!--ng-if="isFolderSelected"-->
-                                    <!--class="btn btn-primary">-->
-                                <!--<i class="glyphicon glyphicon-upload"></i>-->
-                                <!--Загрузить-->
-                            <!--</button>-->
-
-                            <button class="btn btn-default"
-                                    ng-if="filesSelectedCount"
-                                    ng-click="removeFiles()">
-                                <i class="glyphicon glyphicon-remove"></i>
-                                Удалить файлы
-                            </button>
-                            <button class="btn btn-default"
-                                    ng-if="filesSelectedCount"
-                                    ng-click="copyFiles()">
-                                <i class="glyphicon glyphicon-share"></i>
-                                Копировать файлы
-                            </button>
-                            <button class="btn btn-default"
-                                    ng-if="filesSelectedCount"
-                                    ng-click="moveFiles()">
-                                <i class="glyphicon glyphicon-plane"></i>
-                                Переместить файлы
-                            </button>
-                            <button class="btn btn-default"
-                                    ng-click="pastFiles()"
-                                    ng-if="isCopied">
-                                <i class="glyphicon glyphicon-save"></i>
-                                Вставить
-                            </button>
-                        </div>
                     </div>
+
                     <div class="file-manager-container">
                         <div ng-controller="FoldersController"
                              class="folders">
                             <div fm-folders-tree="folders.tree"
-                                 fm-folders-load="loadFiles($path)"></div>
+                                 fm-folders-path="path"></div>
                         </div>
                         <div ng-controller="FilesController" class="files">
                             <ol class="breadcrumb">
@@ -73,22 +31,7 @@
                                     </a>
                                 </li>
                             </ol>
-                            <div class="files-list-wrapper"
-                                 fm-drop-files="upload($files)">
-                                <ul class="files-list">
-                                    <li class="file" ng-repeat="file in files.list">
-                                        <label ng-click="file.selected = !file.selected">
-                                            <i ng-if="file.selected"
-                                               class="file-icon glyphicon glyphicon-check"></i>
-
-                                            <div fm-file-prefix="{{files.path}}" fm-file="{{file.name}}"></div>
-                                            <div class="file-title">
-                                                {{file.name}}
-                                            </div>
-                                        </label>
-                                    </li>
-                                </ul>
-                            </div>
+                            <div ng-include="getViewTemplate()"></div>
                         </div>
                     </div>
                 </div>
@@ -106,20 +49,4 @@
             </div>
         </div>
     </div>
-    <script id="createFolder" type="text/html">
-        <form ng-submit="createFolder(folderName)">
-            <div class="form-group">
-                <label for="folder">Название папки</label>
-                <input ng-model="folderName"
-                       required
-                       type="text" class="form-control"
-                       id="folder" placeholder="Название папки">
-            </div>
-            <button ng-click="close()"
-                    type="button"
-                    class="btn btn-xs btn-default">Отмена
-            </button>
-            <button type="submit" class="btn btn-xs btn-primary">Создать</button>
-        </form>
-    </script>
 </div>

@@ -1,0 +1,14 @@
+<form ng-submit="createFolder(folderName)">
+    <div class="form-group">
+        <label for="folder">Название папки</label>
+        <input ng-model="folderName"
+               required
+               type="text" class="form-control"
+               id="folder" placeholder="Название папки">
+    </div>
+    <button ng-click="close()"
+            type="button"
+            class="btn btn-xs btn-default">Отмена
+    </button>
+    <button type="submit" class="btn btn-xs btn-primary">Создать</button>
+</form>

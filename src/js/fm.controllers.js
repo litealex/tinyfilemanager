@@ -4,10 +4,10 @@
 (function () {
     'use strict';
     angular.module('fm')
-        .controller('InsertController', ['$scope', 'editor', 'foldersSrv', InsertController])
-        .controller('MenuController', ['$scope', 'foldersSrv', MenuController])
+        .controller('FoldersController', ['$scope', 'foldersSrv', FoldersController])
         .controller('FilesController', ['$scope', 'filterFilter', 'foldersSrv', FilesController])
-        .controller('FoldersController', ['$scope', 'foldersSrv', FoldersController]);
+        .controller('MenuController', ['$scope', 'foldersSrv', MenuController])
+        .controller('InsertController', ['$scope', 'editor', 'foldersSrv', InsertController]);
 
     function FoldersController($scope, foldersSrv) {
         foldersSrv.getFolders()
@@ -16,17 +16,25 @@
                 folders.tree.selected = true;
             });
 
-        $scope.loadFiles = function (path) {
+        $scope.$watch('path', function (path) {
+            if (!path) return;
             foldersSrv
                 .loadFiles(path)
                 .then(function () {
                     foldersSrv.changeFrame('files');
                 });
-        };
+        });
 
+        $scope.$on('fmChangePath', function (e, p) {
+            $scope.path = p;
+        });
     }
 
     function FilesController($scope, filterFilter, foldersSrv) {
+        $scope.getViewTemplate = function () {
+            return foldersSrv.getVeiwTemplateUrl();
+        };
+
         $scope.folders = foldersSrv.folders;
         $scope.files = foldersSrv.files;
         $scope.$watch('files', function (files) {
@@ -40,23 +48,19 @@
                 foldersSrv.selectedFiles.length);
         }, true);
         $scope.loadFiles = function (index) {
-            var prefix = $scope.folders.tree.prefix;
-            var path = prefix + '/' + $scope.files
-                    .pathChains
-                    .map(function (f) {
-                        return f.name;
-                    })
-                    .slice(0, index + 1)
-                    .join('/');
-
-            for (var i = 0; i <= index; i++)
-
-                foldersSrv
-                    .loadFiles(path);
+            var prefix = $scope.folders.tree.prefix,
+                path = (prefix === '/' ? '' : prefix) +
+                    '/' + $scope.files
+                        .pathChains
+                        .map(function (f) {
+                            return f.name;
+                        })
+                        .slice(0, index + 1)
+                        .join('/') + '/';
+                foldersSrv.broadcast('fmChangePath', path)
         };
 
         $scope.upload = function (files) {
-            console.log(444);
             foldersSrv.upload(files, function (event) {
                 $scope.$broadcast('fmUploading', event.loaded / event.total * 100);
             }).then(function () {
@@ -68,6 +72,7 @@
     }
 
     function MenuController($scope, foldersSrv) {
+        $scope.menuUrl = foldersSrv.getTemplateUrl('fmMenu');
         $scope.$on('fmFolderSelected', function () {
             $scope.isFolderSelected = true;
         });
@@ -80,6 +85,13 @@
         $scope.$on('fmPasted', function () {
             $scope.isCopied = false;
         });
+
+        $scope.type = foldersSrv.getViewType();
+
+        $scope.setView = function (type) {
+            $scope.type = type;
+            foldersSrv.setViewType(type);
+        };
 
         $scope.showUploadForm = function () {
             foldersSrv.changeFrame('upload');
@@ -111,11 +123,7 @@
         $scope.pastFiles = function () {
             foldersSrv.past();
         };
-
-
     }
-
-
 
     function InsertController($scope, editor, foldersSrv) {
         $scope.$on('fmFilesSelect', function (event, count) {

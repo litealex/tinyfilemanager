@@ -6,78 +6,118 @@
 }
 
 .file-manager-toolbar {
-
+  padding: 1px;
+  border: 1px solid #ddd;
+  border-radius: 0 0 5px 5px;
+  background-image: linear-gradient(to bottom,#fdfdfd,#ddd);
 }
 
 .file-manager-container {
   height: 100%;
   position: relative;
-  .folders {
-    .folder {
-      cursor: pointer;
-    }
-    .active-folder {
-      color: red;
-    }
 
+
+
+}
+
+.folders {
+  .folder {
+    cursor: pointer;
+  }
+  .active-folder {
+    color: red;
+  }
+
+  float: left;
+  overflow: auto;
+  height: 100%;
+  width: 300px;
+  .sub-folders {
+    margin-left: 10px;
+  }
+  .glyphicon {
+    cursor: pointer;
+  }
+
+}
+
+.files {
+  .left-container;
+}
+
+.files-container {
+  margin-bottom: 22px;
+  width: 100%;
+  overflow: auto;
+  position: absolute;
+  top: 37px;
+  bottom: 0;
+}
+
+
+.files-preview {
+  &-list {
+    padding-left: 0;
+    list-style: none;
+  }
+
+  &-file {
+    display: inline-block;
+  }
+
+  &-label {
     float: left;
-    overflow: auto;
-    height: 100%;
-    width: 300px;
-    .sub-folders {
-      margin-left: 10px;
-    }
-    .glyphicon {
-      cursor: pointer;
-    }
+    position: relative;
+    padding: 0 0 20px 0;
+    border: 1px solid #ccc;
+    margin: 2px;
+    cursor: pointer;
+    font-weight: normal;
+    width: 110px;
+    height: 100px;
 
   }
-  .files {
-    .left-container;
-    .files-list-wrapper {
-      margin-bottom: 22px;
-      width: 100%;
-      overflow: auto;
-      position: absolute;
-      top: 37px;
-      bottom: 0;
-      .files-list {
-        padding-left: 0;
-        list-style: none;
-        .file {
-          display: inline-block;
 
-          .file-icon {
-            position: absolute;
-            right: 0;
-            top: 0;
-          }
-          .file-preview {
-            width: 100px;
-          }
-          .file-title {
-            display: inline-block;
-            width: 100%;
-            overflow: hidden;
-            height: 20px;
-            position: absolute;
-            background-color: #000011;
-            color: #fff;
-          }
-          label {
-            padding: 0 0 20px 0;
-            position: relative;
-            border: 1px solid #ccc;
-            margin: 2px;
-            cursor: pointer;
-            font-weight: normal;
-            width: 110px;
-          }
-        }
-      }
-    }
+  &-icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+
+  &-img {
+    max-height: 100%;
+    max-width: 100%;
+  }
+
+  &-wrapper {
+    height: 100%;
+    line-height: 78px;
+    text-align: center;
+  }
+
+  &-title {
+    display: inline-block;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 20px;
+    overflow: hidden;
+    background-color: #000011;
+    color: #fff;
+  }
+
+}
+
+.files-list {
+  &-file {
+    cursor: pointer;
+  }
+  &-ext{
+    width: 16px;
   }
 }
+
+
 
 .upload {
   position: absolute;

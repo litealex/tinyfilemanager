@@ -4,12 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "postinstall": "node node_modules/bower/bin/bower install"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "body-parser": "^1.10.0",
+    "bower": "^1.3.12",
+    "dateformat": "^1.0.11",
     "express": "^4.10.6",
     "grunt": "^0.4.5",
     "grunt-contrib-jshint": "^0.10.0",

@@ -2,6 +2,7 @@ var express = require('express'),
     bodyParser = require('body-parser'),
     rimraf = require('rimraf'),
     fs = require('fs'),
+    dateFormat = require('dateformat'),
     app = express(),
     prefix = 'upload',
     getFoldersTree = function (prefix, tree, callback) {
@@ -71,10 +72,7 @@ app.post('/files', function (req, res) {
                 readFiles(body.path, function (files) {
                     res.send({files: files});
                 });
-
         }
-
-
     }
 
 });
@@ -88,8 +86,6 @@ app.listen(3000, function (req, res) {
 });
 
 function createFolder(vp, name, callback) {
-    console.log('22222');
-    console.log(arguments);
     fs.mkdir('.' + vp + name, callback);
 }
 
@@ -99,10 +95,20 @@ function deleteFolder(vp, name, callback) {
 
 function readFiles(vp, callback) {
     fs.readdir('.' + vp, function (err, infos) {
-        callback(infos.filter(function (f) {
-            return !fs.statSync('./' + vp + '/' + f).isDirectory();
-        }).map(function (f) {
-            return {name: f};
+        callback(infos.map(function (f) {
+            var stat = fs.statSync('./' + vp + '/' + f);
+            return {
+                name: f,
+                size: stat.size,
+                date: dateFormat(stat.mtime, 'dd.MM.yy hh:mm:ss'),
+                isFile: !stat.isDirectory()
+            };
+        }).filter(function (f) {
+            try {
+                return f.isFile;
+            } finally {
+                delete  f.isFile;
+            }
         }))
     });
 }

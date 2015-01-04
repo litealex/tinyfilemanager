@@ -4,32 +4,39 @@
 (function () {
     'use strict';
     angular.module('fm')
-        .directive('fmFile', ['fmCfg', fmFile])
-        .directive('fmDialog', ['$compile', '$http', 'fmCfg', fmDialog])
-        .directive('fmProgress', ['fmCfg', fmProgress])
-        .directive('fmDropFiles', ['$parse', '$compile', fmDropFiles])
+        .directive('fmFoldersTree', ['$compile', '$parse', 'foldersSrv', fmFoldersTree])
         .directive('stopEvent', [stopEvent])
-        .directive('fmFoldersTree',
-        ['$compile', '$parse', 'fmCfg', 'foldersSrv', fmFoldersTree]);
+        .directive('fmDropFiles', ['$parse', '$compile', fmDropFiles])
+        .directive('fmProgress', ['fmCfg', fmProgress])
+        .directive('fmFile', ['fmCfg', fmFile])
+        .directive('fmDialog', ['$compile', 'foldersSrv', fmDialog])
+        .directive('fmFileExt', ['fmCfg', fmFileExt]);
 
-    function fmFoldersTree($compile, $parse, fmCfg, foldersSrv) {
-        var tempalteUrl = fmCfg.templatesPrefix + 'fmFoldersTree.html',
-            selectedFolder = null;
+    function fmFoldersTree($compile, $parse, foldersSrv) {
         return {
             scope: true,
             link: function (scope, element, attrs) {
+                var selectedPath = null;
                 scope.level = (scope.level || 0) + 1;
-                scope.isHide = false; //scope.level < 2;
+                scope.isHide = false;
+
+                if (scope.level === 1) {
+
+                    scope.load = function (path) {
+                        $parse(attrs.fmFoldersPath).assign(scope.$parent, path);
+                    };
+
+                    scope.isSelected = function (path) {
+                        return path === selectedPath;
+                    };
+
+                    scope.$watch(attrs.fmFoldersPath, function (p) {
+                        selectedPath = p;
+                    });
+                }
 
                 scope.toggleCollapse = function () {
                     scope.isHide = !scope.isHide;
-                };
-                scope.load = function () {
-                    selectedFolder = scope.folder.fullPath;
-                    $parse(scope._loadFn)(scope);
-                };
-                scope.isSelected = function () {
-                    return scope.folder.fullPath === selectedFolder;
                 };
 
                 scope.$watch(attrs.fmFoldersTree, function (folder) {
@@ -40,21 +47,21 @@
 
                     scope.folder = folder;
                     if (scope.level === 1) {
-                        scope.$path = scope.prefix + folder.name + '/';
-                        scope._loadFn = attrs.fmFoldersLoad;
+                        scope.$fullPath = scope.prefix + folder.name + '/';
                     } else {
-                        scope.$path = scope.$path + folder.name + '/';
+                        scope.$fullPath = scope.$fullPath + folder.name + '/';
                     }
 
-                    folder.fullPath = scope.$path;
+                    folder.fullPath = scope.$fullPath;
+
                     if (folder.selected) {
-                        scope.load();
+                        scope.load(folder.fullPath);
                     }
 
                 });
 
                 foldersSrv
-                    .getTemplate(tempalteUrl)
+                    .getTemplate('fmFoldersTree')
                     .then(function (template) {
                         element.append($compile(template)(scope));
                     });
@@ -112,11 +119,10 @@
         };
     }
 
-
     function fmProgress(fmCfg) {
         return {
             scope: true,
-            templateUrl: fmCfg.templatesPrefix + 'fmProgress.html',
+            templateUrl: fmCfg.getTemplateUrl('fmProgress'),
             link: function (scope, element, attrs) {
                 scope.$on(attrs.fmProgress, function (e, val) {
                     if (typeof  val === 'number') {
@@ -133,16 +139,19 @@
 
     function fmFile(fmCfg) {
         var imgExtensions = fmCfg.imgExtensions,
-            prefix = fmCfg.extensionPrefix;
+            prefix = fmCfg.extensionPrefix512;
         return {
             scope: true,
-            templateUrl: fmCfg.templatesPrefix + 'fmFile.html',
+            templateUrl: fmCfg.getTemplateUrl('fmFile'),
             link: function (scope, element, attrs) {
                 var file = attrs.fmFile,
                     ext = (file.split('.').pop() || '').toLowerCase();
 
                 if (imgExtensions.indexOf(ext) == -1) {
                     scope.file = prefix + ext + '.png';
+                    element.find('img').on('error', function () {
+                        this.src = prefix + '_blank.png';
+                    });
                 } else {
                     scope.file = attrs.fmFilePrefix + file;
                 }
@@ -150,12 +159,12 @@
         };
     }
 
-    function fmDialog($compile) {
+    function fmDialog($compile, foldersSrv) {
         return {
             scope: true,
             link: function (scope, element, attrs) {
                 var isVisible = false,
-                    $template;
+                    $template = $('<div class="fm-dialog"></div>');
                 scope.close = function () {
                     if ($template) {
                         $template.remove();
@@ -167,11 +176,13 @@
                     if (isVisible) {
                         scope.close();
                     } else {
-                        $template = $compile('<div class="fm-dialog">' +
-                        $(attrs.fmDialog).html() +
-                        '</div>')(scope).css(element.offset());
-                        element.after($template).removeClass('modal-open');
-                        isVisible = true;
+                        foldersSrv
+                            .getTemplate(attrs.fmDialog)
+                            .then(function (template) {
+                                $template.html($compile(template)(scope)).css(element.offset());
+                                element.after($template).removeClass('modal-open');
+                                isVisible = true;
+                            });
                     }
                     $template.on('submit', function () {
                         scope.close();
@@ -180,4 +191,18 @@
             }
         };
     }
+
+    function fmFileExt(fmCfg) {
+        var prefix = fmCfg.extensionPrefix32;
+        return {
+            link: function (scope, element, attrs) {
+                var ext = (attrs.fmFileExt.split('.').pop() || '')
+                    .toLowerCase();
+                element.attr('src', prefix + ext + '.png');
+                element.on('error', function () {
+                    this.src = prefix + '_blank.png';
+                });
+            }
+        };
+    };
 }());

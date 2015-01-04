@@ -3,5 +3,5 @@
  */
 (function(){
     'use strict';
-    angular.module('fm', ['ngMessages']);
+    angular.module('fm', []);
 }());

@@ -6,24 +6,30 @@
 
     function FoldersSrv($rootScope, $http, $q, $templateCache, fmCfg) {
         var self = this;
-        this.getTemplate = function (url) {
-            return $http({
+        this.getTemplateUrl = function (template) {
+            return fmCfg.getTemplateUrl(template);
+        };
+        this.getTemplate = function (template) {
+            var result = $http({
                 cache: $templateCache,
-                url: url,
+                url: fmCfg.getTemplateUrl(template),
                 method: 'get'
             }).then(function (res) {
                 return res.data;
             });
+
+            return result;
         };
-        this.getFolders = function () {
-            return $http({
-                url: fmCfg.actionsUrl,
-                method: 'POST'
-            }).then(function (res) {
-                self.folders.tree = res.data;
-                return self.folders;
-            });
+        this.getVeiwTemplateUrl = function () {
+            return fmCfg.getTemplateUrl('fmFiles' + fmCfg.viewType);
         };
+        this.getViewType = function () {
+            return fmCfg.viewType;
+        };
+        this.setViewType = function (type) {
+            fmCfg.viewType = type;
+        };
+
 
         /**
          * list - список файлов
@@ -38,6 +44,15 @@
         this.buffer = null;
         this.selectedFiles = null;
 
+        this.getFolders = function () {
+            return $http({
+                url: fmCfg.actionsUrl,
+                method: 'POST'
+            }).then(function (res) {
+                self.folders.tree = res.data;
+                return self.folders;
+            });
+        };
         this.loadFiles = function (path) {
             return $http({
                 url: fmCfg.actionsUrl,
@@ -97,7 +112,6 @@
             $rootScope.$broadcast('fmChangeFrame', frame);
         };
         this.broadcast = $rootScope.$broadcast.bind($rootScope);
-
         this.copy = function (isMove) {
             this.isMove = isMove;
             this.pathFrom = this.files.path;
@@ -120,7 +134,6 @@
                 self.broadcast('fmPasted');
             });
         };
-
         this.removeFiles = function () {
             return $http({
                 url: fmCfg.actionsUrl,
@@ -132,7 +145,6 @@
                 }
             });
         };
-
         this.folderActions = function (action, name) {
             return $http({
                 url: fmCfg.actionsUrl,
@@ -142,7 +154,7 @@
                     c: action,
                     name: name
                 }
-            }).then(function(){
+            }).then(function () {
                 self.getFolders();
             });
         };

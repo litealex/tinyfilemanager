@@ -1,0 +1,32 @@
+<div class="files-container"
+     fm-drop-files="upload($files)">
+    <table class="table">
+        <tr>
+            <th>
+                <i class="glyphicon glyphicon-unchecked"></i>
+            </th>
+            <th>Файл</th>
+            <th>Размер</th>
+            <th>Дата</th>
+        </tr>
+        <tr ng-repeat="file in files.list"
+            ng-click="file.selected = !file.selected"
+            ng-class="{'success':file.selected}"
+            class="files-list-file">
+            <td>
+                <i class="glyphicon"
+                   ng-class="{
+                        'glyphicon-unchecked':!file.selected,
+                        'glyphicon-check':file.selected
+                        }"></i>
+            </td>
+            <td>
+                <img fm-file-ext="{{file.name}}"
+                     class="files-list-ext"/>
+                {{file.name}}
+            </td>
+            <td>{{file.size}}</td>
+            <td>{{file.date}}</td>
+        </tr>
+    </table>
+</div>

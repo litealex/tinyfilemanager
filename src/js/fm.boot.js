@@ -10,8 +10,13 @@
             .value('fmCfg', {
                 actionsUrl: '/files',
                 templatesPrefix: '/src/templates/',
+                getTemplateUrl: function (template) {
+                    return this.templatesPrefix + template + '.html';
+                },
                 imgExtensions: ['jpg', 'gif', 'png', 'jpeg', 'bmp', 'svg'],
-                extensionPrefix: '/src/img/512px/'
+                extensionPrefix512: '/src/img/512px/',
+                extensionPrefix32: '/src/img/32px/',
+                viewType: 'list'
             });
         angular.bootstrap(holderElement, ['fm']);
     };

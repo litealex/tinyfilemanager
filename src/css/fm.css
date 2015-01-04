@@ -4,35 +4,41 @@
   left: 310px;
   right: 0;
 }
+.file-manager-toolbar {
+  padding: 1px;
+  border: 1px solid #ddd;
+  border-radius: 0 0 5px 5px;
+  background-image: linear-gradient(to bottom, #fdfdfd, #dddddd);
+}
 .file-manager-container {
   height: 100%;
   position: relative;
 }
-.file-manager-container .folders {
+.folders {
   float: left;
   overflow: auto;
   height: 100%;
   width: 300px;
 }
-.file-manager-container .folders .folder {
+.folders .folder {
   cursor: pointer;
 }
-.file-manager-container .folders .active-folder {
+.folders .active-folder {
   color: red;
 }
-.file-manager-container .folders .sub-folders {
+.folders .sub-folders {
   margin-left: 10px;
 }
-.file-manager-container .folders .glyphicon {
+.folders .glyphicon {
   cursor: pointer;
 }
-.file-manager-container .files {
+.files {
   height: 100%;
   position: absolute;
   left: 310px;
   right: 0;
 }
-.file-manager-container .files .files-list-wrapper {
+.files-container {
   margin-bottom: 22px;
   width: 100%;
   overflow: auto;
@@ -40,38 +46,53 @@
   top: 37px;
   bottom: 0;
 }
-.file-manager-container .files .files-list-wrapper .files-list {
+.files-preview-list {
   padding-left: 0;
   list-style: none;
 }
-.file-manager-container .files .files-list-wrapper .files-list .file {
+.files-preview-file {
   display: inline-block;
 }
-.file-manager-container .files .files-list-wrapper .files-list .file .file-icon {
-  position: absolute;
-  right: 0;
-  top: 0;
-}
-.file-manager-container .files .files-list-wrapper .files-list .file .file-preview {
-  width: 100px;
-}
-.file-manager-container .files .files-list-wrapper .files-list .file .file-title {
-  display: inline-block;
-  width: 100%;
-  overflow: hidden;
-  height: 20px;
-  position: absolute;
-  background-color: #000011;
-  color: #fff;
-}
-.file-manager-container .files .files-list-wrapper .files-list .file label {
-  padding: 0 0 20px 0;
+.files-preview-label {
+  float: left;
   position: relative;
+  padding: 0 0 20px 0;
   border: 1px solid #ccc;
   margin: 2px;
   cursor: pointer;
   font-weight: normal;
   width: 110px;
+  height: 100px;
+}
+.files-preview-icon {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.files-preview-img {
+  max-height: 100%;
+  max-width: 100%;
+}
+.files-preview-wrapper {
+  height: 100%;
+  line-height: 78px;
+  text-align: center;
+}
+.files-preview-title {
+  display: inline-block;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 20px;
+  overflow: hidden;
+  background-color: #000011;
+  color: #fff;
+}
+.files-list-file {
+  cursor: pointer;
+}
+.files-list-ext {
+  width: 16px;
 }
 .upload {
   position: absolute;
