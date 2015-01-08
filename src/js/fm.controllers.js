@@ -107,7 +107,7 @@
         $scope.removeFolder = function () {
             foldersSrv
                 .folderActions('delfolder')
-                .then(function(){
+                .then(function () {
                     var chains = foldersSrv.files.pathChains;
                     chains.pop();
                     foldersSrv.broadcast('fmChangePath',
@@ -137,6 +137,11 @@
 
         $scope.pastFiles = function () {
             foldersSrv.past();
+        };
+
+        $scope.refresh = function () {
+            foldersSrv.refreshFolder();
+            foldersSrv.getFolders();
         };
     }
 

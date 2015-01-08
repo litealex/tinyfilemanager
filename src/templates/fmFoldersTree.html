@@ -1,6 +1,6 @@
 <div class="folder">
     <span ng-click="load(folder.fullPath)"
-          ng-class="{'text-success':isSelected(folder.fullPath)}"
+          ng-class="{'active-folder':isSelected(folder.fullPath)}"
           class="folder">
 		<i ng-if="folder.folders.length"
 		   stop-event="click"
