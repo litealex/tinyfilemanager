@@ -8,14 +8,14 @@
                 return editor;
             })
             .value('fmCfg', {
-                actionsUrl: '/SimpleEditor.ashx',
-                templatesPrefix: '/src/templates/',
+                actionsUrl: editor.settings.external_filemanager_path + '/SimpleEditor.ashx',
+                templatesPrefix: editor.settings.external_filemanager_path + '/src/templates/',
                 getTemplateUrl: function (template) {
                     return this.templatesPrefix + template + '.html';
                 },
                 imgExtensions: ['jpg', 'gif', 'png', 'jpeg', 'bmp', 'svg'],
-                extensionPrefix512: '/src/img/512px/',
-                extensionPrefix32: '/src/img/32px/',
+                extensionPrefix512: editor.settings.external_filemanager_path + '/src/img/512px/',
+                extensionPrefix32: editor.settings.external_filemanager_path + '/src/img/32px/',
                 viewType: 'list'
             });
         angular.bootstrap(holderElement, ['fm']);

@@ -1,51 +1,62 @@
 <div class="btn-group btn-group-xs">
-    <button class="btn btn-default"
+    <button class="btn btn-default menu_btn"
             fm-dialog="fmCreateFolder">
-        <i class="glyphicon glyphicon-plus"></i>
+		<i class="glyphicon folder-add"></i>
         Создать папку
     </button>
-    <button class="btn btn-default"
-            ng-if="isFolderSelected"
-            ng-click="removeFolder()">
-        <i class="glyphicon glyphicon-remove"></i>
-        Удалить папку
-    </button>
-    <button class="btn btn-default"
-            ng-if="filesSelectedCount"
-            ng-click="removeFiles()">
-        <i class="glyphicon glyphicon-remove"></i>
-        Удалить файлы
-    </button>
-    <button class="btn btn-default"
-            ng-if="filesSelectedCount"
-            ng-click="copyFiles()">
-        <i class="glyphicon glyphicon-share"></i>
-        Копировать файлы
-    </button>
-    <button class="btn btn-default"
-            ng-if="filesSelectedCount"
-            ng-click="moveFiles()">
-        <i class="glyphicon glyphicon-plane"></i>
-        Переместить файлы
-    </button>
-    <button class="btn btn-default"
-            ng-click="pastFiles()"
-            ng-if="isCopied">
-        <i class="glyphicon glyphicon-save"></i>
-        Вставить
-    </button>
+	<button class="btn btn-default menu_btn"
+			ng-if="isFolderSelected"
+			ng-click="removeFolder()">
+		<i class="glyphicon folder-del"></i>
+		Удалить папку
+	</button>
+	<button class="btn btn-default menu_btn"
+			ng-if="isFolderSelected"
+			ng-click="uploadFiles()">
+		<i class="glyphicon file-upload"></i>
+		Загрузить файлы
+	</button>
+	<button class="btn btn-default menu_btn"
+			ng-if="filesSelectedCount"
+			ng-click="removeFiles()">
+		<i class="glyphicon file-del"></i>
+		Удалить файлы
+	</button>
+	<button class="btn btn-default menu_btn"
+			ng-if="filesSelectedCount"
+			ng-click="copyFiles()">
+		<i class="glyphicon file-copy"></i>
+		Копировать файлы
+	</button>
+	<button class="btn btn-default menu_btn"
+			ng-if="filesSelectedCount"
+			ng-click="moveFiles()">
+		<i class="glyphicon file-cut"></i>
+		Переместить файлы
+	</button>
+	<button class="btn btn-default menu_btn"
+			ng-click="pastFiles()"
+			ng-if="isCopied">
+		<i class="glyphicon file-paste"></i>
+		Вставить
+	</button>
 </div>
 <div class="pull-right">
     <div class="btn-group btn-group-xs">
-        <button ng-class="{ active: type === 'list' }"
+        <button ng-class="{ active: type === 'list' }" title="Список"
                 ng-click="setView('list')"
                 class="btn btn-default">
             <i class="glyphicon glyphicon-th-list"></i>
         </button>
-        <button ng-class="{ active: type === 'preview' }"
-                ng-click="setView('preview')"
-                class="btn btn-default">
-            <i class="glyphicon glyphicon-th"></i>
-        </button>
+		<button ng-class="{ active: type === 'preview' }" title="Иконки"
+				ng-click="setView('preview')"
+				class="btn btn-default">
+			<i class="glyphicon glyphicon-th"></i>
+		</button>
+		<button ng-class="{ active: type === 'refresh' }" title="Обновить"
+				ng-click="setView('')"
+				class="btn btn-default" style="margin-left:10px;">
+			<i class="glyphicon glyphicon-refresh"></i>
+		</button>
     </div>
 </div>

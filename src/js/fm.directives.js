@@ -47,7 +47,7 @@
 
                     scope.folder = folder;
                     if (scope.level === 1) {
-                        scope.$fullPath =  scope.prefix + folder.name + '/';
+                        scope.$fullPath = scope.prefix + folder.name + '/';
                     } else {
                         scope.$fullPath = scope.$fullPath + folder.name + '/';
                     }
@@ -125,7 +125,7 @@
             templateUrl: fmCfg.getTemplateUrl('fmProgress'),
             link: function (scope, element, attrs) {
                 scope.$on(attrs.fmProgress, function (e, val) {
-                    if (typeof  val === 'number') {
+                    if (typeof val === 'number') {
                         scope.visible = true;
                         scope.progress = val.toFixed(2);
                     } else {

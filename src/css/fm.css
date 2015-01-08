@@ -1,3 +1,13 @@
+._folder {
+  cursor: pointer;
+  width: 15px;
+  height: 15px;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  background-repeat: no-repeat;
+  background-position: 0px -2px;
+}
 .left-container {
   height: 100%;
   position: absolute;
@@ -9,6 +19,18 @@
   border: 1px solid #ddd;
   border-radius: 0 0 5px 5px;
   background-image: linear-gradient(to bottom, #fdfdfd, #dddddd);
+}
+.file-manager-toolbar .menu_btn {
+  padding-left: 25px;
+  min-height: 26px;
+  font-size: 11px;
+}
+.file-manager-toolbar .menu_btn .glyphicon {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  left: 4px;
+  top: 2px;
 }
 .file-manager-container {
   height: 100%;
@@ -23,8 +45,36 @@
 .folders .folder {
   cursor: pointer;
 }
+.folders span.folder {
+  padding-left: 35px;
+  position: relative;
+  background: url(../img/ic_folder_22.png) no-repeat 17px 3px;
+}
+.folders .folder-plus {
+  cursor: pointer;
+  width: 15px;
+  height: 15px;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  background-repeat: no-repeat;
+  background-position: 0px -2px;
+  background-image: url(../img/ic_plus.gif);
+}
+.folders .folder-minus {
+  cursor: pointer;
+  width: 15px;
+  height: 15px;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  background-repeat: no-repeat;
+  background-position: 0px -2px;
+  background-image: url(../img/ic_minus.gif);
+}
 .folders .active-folder {
-  color: red;
+  color: #cc0000;
+  font-weight: bold;
 }
 .folders .sub-folders {
   margin-left: 10px;
@@ -114,4 +164,25 @@
   background-color: #fff;
   border-radius: 5px;
   box-shadow: 1px 1px 10px #ccc;
+}
+.folder-add {
+  background: url(../img/ic_folder_add_2.png) no-repeat 0px 0px;
+}
+.folder-del {
+  background: url(../img/ic_folder_del_2.png) no-repeat 0px 0px;
+}
+.file-upload {
+  background: url(../img/ic_file_upload_2.png) no-repeat 0px 0px;
+}
+.file-del {
+  background: url(../img/ic_file_del_2.png) no-repeat 0px 0px;
+}
+.file-copy {
+  background: url(../img/ic_file_copy_2.png) no-repeat 0px 0px;
+}
+.file-cut {
+  background: url(../img/ic_file_cut_2.png) no-repeat 0px 0px;
+}
+.file-paste {
+  background: url(../img/ic_file_paste_2.png) no-repeat 0px 0px;
 }
