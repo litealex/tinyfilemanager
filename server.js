@@ -39,9 +39,9 @@ app.use(express.static(__dirname));
 app.use(bodyParser.json());
 
 
-app.post('/files', function (req, res) {
+app.post('/SimpleEditor.ashx', function (req, res) {
     var body = req.body,
-        vp = body.path;
+        vp = req.query.virtualpath;
 
     if (vp === undefined) {
         getFoldersTree(prefix, {prefix: '/'}, function (tree) {
@@ -69,7 +69,7 @@ app.post('/files', function (req, res) {
             case 'move':
                 break;
             default :
-                readFiles(body.path, function (files) {
+                readFiles(vp, function (files) {
                     res.send({files: files});
                 });
         }
