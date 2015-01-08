@@ -155,15 +155,33 @@
   color: rgba(255, 255, 255, 0.8);
   padding-left: 124px;
 }
+.fm-upload {
+  margin-top: 95px;
+}
 .fm-dialog {
-  position: absolute;
-  width: 250px;
+  position: fixed;
   z-index: 2000;
   border: 1px solid #c2ccd1;
   padding: 10px;
   background-color: #fff;
   border-radius: 5px;
   box-shadow: 1px 1px 10px #ccc;
+}
+.drop-area {
+  width: 300px;
+  min-height: 200px;
+  max-height: 300px;
+  border: 1px dashed #c8c8c8;
+  overflow: auto;
+}
+.drop-area-label {
+  line-height: 200px;
+  text-align: center;
+}
+.drop-area-files {
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 .folder-add {
   background: url(../img/ic_folder_add_2.png) no-repeat 0px 0px;
@@ -185,4 +203,14 @@
 }
 .file-paste {
   background: url(../img/ic_file_paste_2.png) no-repeat 0px 0px;
+}
+.pointer {
+  cursor: pointer;
+}
+.clearfix:after {
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
 }

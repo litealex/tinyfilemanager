@@ -10,7 +10,8 @@
         .directive('fmProgress', ['fmCfg', fmProgress])
         .directive('fmFile', ['fmCfg', fmFile])
         .directive('fmDialog', ['$compile', 'foldersSrv', fmDialog])
-        .directive('fmFileExt', ['fmCfg', fmFileExt]);
+        .directive('fmFileExt', ['fmCfg', fmFileExt])
+        .directive('fmUploadFile', ['$parse', fmUploadFile]);
 
     function fmFoldersTree($compile, $parse, foldersSrv) {
         return {
@@ -78,33 +79,16 @@
     }
 
     function fmDropFiles($parse, $compile) {
-        var $template = angular.element('<div class="upload bg-info">' +
-        '<i class="glyphicon glyphicon-upload"></i>' +
-        '<div fm-progress="fmUploading"></div>' +
-        '</div>');
         return {
             scope: true,
             link: function (scope, element, attrs) {
-                var isOver = false,
-                    leave = function () {
-                        if (isOver) {
-                            $template.remove();
-                            isOver = false;
-                        }
-                        return false;
-                    };
-                $compile($template)(scope);
+
 
                 element.on('dragover', function () {
-                    if (!isOver) {
-                        var css = {
-                            width: element.width(),
-                            height: element[0].scrollHeight
-                        };
-                        element.append($template.css(css)
-                            .on('dragleave', leave));
-                        isOver = true;
-                    }
+                    element
+                        .on('dragleave', function () {
+
+                        });
                     return false;
                 }).on('drop', function (e) {
                     e.preventDefault();
@@ -114,7 +98,8 @@
                     });
                 });
 
-                scope.$on('fmEndUploading', leave);
+                scope.$on('fmEndUploading', function () {
+                });
             }
         };
     }
@@ -164,7 +149,8 @@
             scope: true,
             link: function (scope, element, attrs) {
                 var isVisible = false,
-                    $template = $('<div class="fm-dialog"></div>');
+                    $template = $('<div class="fm-dialog"></div>'),
+                    parentOffseet = null;
                 scope.close = function () {
                     if ($template) {
                         $template.remove();
@@ -179,8 +165,19 @@
                         foldersSrv
                             .getTemplate(attrs.fmDialog)
                             .then(function (template) {
+                                if (!parentOffseet) {
+                                    parentOffseet = {left: 0, top: 0};
+                                    var parent = element;
+                                    while (parent = parent.parent()) {
+                                        var offset = parent.offset();
+                                        if (!offset) break;
+                                        parentOffseet.left += offset.left;
+                                        parentOffseet.top += offset.top;
+                                    }
+
+                                }
                                 $template.html($compile(template)(scope)).css(element.offset());
-                                element.after($template).removeClass('modal-open');
+                                $('body').prepend($template).removeClass('modal-open');
                                 isVisible = true;
                             });
                     }
@@ -204,5 +201,25 @@
                 });
             }
         };
+    }
+
+    function fmUploadFile($parse) {
+        var $file = angular.element('<input style="display: none" multiple="multiple" type="file"/>'),
+            $body = angular.element('body');
+        return {
+            scope: true,
+            link: function (scope, element, attrs) {
+                $body.append($file);
+                $file.on('change', function (e) {
+                    scope.$files = Array.prototype.slice.call(this.files);
+                    scope.$apply(function () {
+                        $parse(attrs.fmUploadFile)(scope);
+                    });
+                });
+                element.on('click', function () {
+                    $file.click();
+                });
+            }
+        }
     }
 }());

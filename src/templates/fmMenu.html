@@ -11,8 +11,8 @@
 		Удалить папку
 	</button>
 	<button class="btn btn-default menu_btn"
-			ng-if="isFolderSelected"
-			ng-click="uploadFiles()">
+			fm-dialog="fmUpload"
+			ng-if="isFolderSelected">
 		<i class="glyphicon file-upload"></i>
 		Загрузить файлы
 	</button>

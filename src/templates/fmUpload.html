@@ -1,0 +1,46 @@
+<div ng-controller="UploadController">
+    <h4>
+        Загрузчик файлов
+    </h4>
+
+    <div class="drop-area"
+         fm-drop-files="addToList($files)">
+        <div ng-if="!files.length"
+             class="drop-area-label">
+            Для загрузки перетащите файлы сюда
+        </div>
+        <div ng-if="files.length && !uploading">
+            <ul class="drop-area-files">
+                <li ng-repeat="file in files">
+                    <i ng-click="remove($index)"
+                       class="glyphicon glyphicon-remove text-danger pointer"></i>
+                    {{file.name}}
+                </li>
+            </ul>
+        </div>
+        <div ng-if="uploading"
+             fm-progress="fmUploading"
+             class="fm-upload"></div>
+
+
+    </div>
+
+    <div class="clearfix">
+        <button fm-Upload-File="addToList($files)"
+                class="pull-right btn btn-default btn-xs">
+            <i class="glyphicon glyphicon-plus"></i>
+            Добавить файл
+        </button>
+    </div>
+    <div>
+        <button ng-click="close()"
+                class="btn btn-default btn-xs">
+            Отмена
+        </button>
+        <button ng-click="upload(files)"
+                class="btn btn-xs btn-primary pull-right">
+            <i class="glyphicon glyphicon-cloud-upload"></i>
+            Загрузить
+        </button>
+    </div>
+</div>

@@ -7,7 +7,8 @@
         .controller('FoldersController', ['$scope', 'foldersSrv', FoldersController])
         .controller('FilesController', ['$scope', 'filterFilter', 'foldersSrv', FilesController])
         .controller('MenuController', ['$scope', 'foldersSrv', MenuController])
-        .controller('InsertController', ['$scope', 'editor', 'foldersSrv', InsertController]);
+        .controller('InsertController', ['$scope', 'editor', 'foldersSrv', InsertController])
+        .controller('UploadController', ['$scope', 'foldersSrv', UploadController]);
 
     function FoldersController($scope, foldersSrv) {
         foldersSrv.getFolders()
@@ -60,15 +61,7 @@
             foldersSrv.broadcast('fmChangePath', path);
         };
 
-        $scope.upload = function (files) {
-            foldersSrv.upload(files, function (event) {
-                $scope.$broadcast('fmUploading', event.loaded / event.total * 100);
-            }).then(function () {
-                foldersSrv.refreshFolder().then(function () {
-                    $scope.$broadcast('fmEndUploading');
-                });
-            });
-        };
+
     }
 
     function MenuController($scope, foldersSrv) {
@@ -160,5 +153,29 @@
             editor.insertContent(imgs.join(''));
         };
     }
+
+    function UploadController($scope, foldersSrv) {
+        $scope.files = [];
+        $scope.addToList = function (files) {
+            $scope.files = $scope.files.concat(files);
+        };
+
+        $scope.upload = function (files) {
+            $scope.uploading = true;
+            foldersSrv.upload(files, function (event) {
+                $scope.$broadcast('fmUploading', event.loaded / event.total * 100);
+            }).then(function () {
+                foldersSrv.refreshFolder().then(function () {
+                    $scope.uploading = false;
+                    $scope.close();
+                });
+            });
+        };
+
+        $scope.remove = function (i) {
+            $scope.files.splice(i, 1);
+        };
+    }
+
 
 }());
