@@ -65,7 +65,7 @@
     }
 
     function MenuController($scope, foldersSrv) {
-        $scope.menuUrl = foldersSrv.getTemplateUrl('fmMenu');
+    	$scope.menuUrl = foldersSrv.getTemplateUrl('fmMenu');
         $scope.$on('fmFolderSelected', function () {
             $scope.isFolderSelected = true;
         });
@@ -79,13 +79,6 @@
             $scope.isCopied = false;
         });
 
-        $scope.type = foldersSrv.getViewType();
-
-        $scope.setView = function (type) {
-            $scope.type = type;
-            foldersSrv.setViewType(type);
-        };
-
         $scope.showUploadForm = function () {
             foldersSrv.changeFrame('upload');
         };
@@ -94,6 +87,7 @@
             foldersSrv.removeFiles()
                 .then(function () {
                     foldersSrv.refreshFolder();
+                    foldersSrv.broadcast('fmDialogClose');
                 });
         };
 
@@ -107,6 +101,7 @@
                         '/' + chains.map(function (f) {
                             return f.name;
                         }).join('/') + '/');
+                    foldersSrv.broadcast('fmDialogClose');
                 });
         };
 
@@ -115,7 +110,7 @@
                 .folderActions('createfolder', name)
                 .then(function () {
                     foldersSrv.broadcast('fmChangePath',
-                        foldersSrv.files.path + name + '/');
+                        foldersSrv.files.path + name + '/').refreshFolder();
                 });
 
         };
@@ -129,13 +124,24 @@
         };
 
         $scope.pastFiles = function () {
-            foldersSrv.past();
+        	foldersSrv.past().then(function () {
+        		foldersSrv.refreshFolder();
+        	});
+        };
+
+        $scope.type = foldersSrv.getViewType();
+
+        $scope.setView = function (type) {
+            $scope.type = type;
+            foldersSrv.setViewType(type);
         };
 
         $scope.refresh = function () {
             foldersSrv.refreshFolder();
             foldersSrv.getFolders();
         };
+
+
     }
 
     function InsertController($scope, editor, foldersSrv) {

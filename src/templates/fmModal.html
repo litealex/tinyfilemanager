@@ -20,19 +20,38 @@
                     <div class="file-manager-container">
                         <div ng-controller="FoldersController"
                              class="folders">
-                            <div fm-folders-tree="folders.tree"
-                                 fm-folders-path="path"></div>
+							<div fm-folders-tree="folders.tree"
+								 fm-folders-path="path"></div>
                         </div>
                         <div ng-controller="FilesController" class="files">
-                            <ol class="breadcrumb">
-                                <li ng-repeat="folder in files.pathChains">
-                                    <a ng-click="loadFiles($index)" href="#">
-                                        {{folder.name}}
-                                    </a>
-                                </li>
-                            </ol>
+							<ol class="breadcrumb path">
+								<li ng-repeat="folder in files.pathChains">
+									<a ng-click="loadFiles($index)" href="#">
+										{{folder.name}}
+									</a>
+								</li>
+							</ol>
                             <div ng-include="getViewTemplate()"></div>
                         </div>
+						<div ng-controller="MenuController" class="pull-right">
+							<div class="btn-group btn-group-xs">
+								<button ng-class="{ active: type === 'list' }" title="Список"
+										ng-click="setView('list')"
+										class="btn btn-default">
+									<i class="glyphicon glyphicon-th-list"></i>
+								</button>
+								<button ng-class="{ active: type === 'preview' }" title="Иконки"
+										ng-click="setView('preview')"
+										class="btn btn-default">
+									<i class="glyphicon glyphicon-th"></i>
+								</button>
+								<button title="Обновить"
+										ng-click="refresh()"
+										class="btn btn-default">
+									<i class="glyphicon glyphicon-refresh"></i>
+								</button>
+							</div>
+						</div>						
                     </div>
                 </div>
             </div>

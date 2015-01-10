@@ -3,6 +3,7 @@
  */
 (function (w) {
     w.fileManager = function (holderElement, editor, cfg, path) {
+        var $holderElement = $(holderElement);
         angular.module('fm')
             .factory('editor', function () {
                 return editor;
@@ -19,5 +20,12 @@
                 viewType: 'list'
             });
         angular.bootstrap(holderElement, ['fm']);
+        $holderElement
+            .on('hide.bs.modal', function () {
+                $holderElement
+                    .scope()
+                    .$broadcast('fmDialogClose');
+
+            });
     };
 }(window));

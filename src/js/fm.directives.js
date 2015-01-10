@@ -9,7 +9,7 @@
         .directive('fmDropFiles', ['$parse', '$compile', fmDropFiles])
         .directive('fmProgress', ['fmCfg', fmProgress])
         .directive('fmFile', ['fmCfg', fmFile])
-        .directive('fmDialog', ['$compile', 'foldersSrv', fmDialog])
+        .directive('fmDialog', ['$compile', '$parse', 'foldersSrv', fmDialog])
         .directive('fmFileExt', ['fmCfg', fmFileExt])
         .directive('fmUploadFile', ['$parse', fmUploadFile]);
 
@@ -144,13 +144,17 @@
         };
     }
 
-    function fmDialog($compile, foldersSrv) {
+    function fmDialog($compile, $parse, foldersSrv) {
         return {
             scope: true,
             link: function (scope, element, attrs) {
                 var isVisible = false,
                     $template = $('<div class="fm-dialog"></div>'),
                     parentOffseet = null;
+
+                if(attrs.fmDialogData) {
+                    scope.data = $parse(attrs.fmDialogData)(scope);
+                }
                 scope.close = function () {
                     if ($template) {
                         $template.remove();
@@ -184,6 +188,9 @@
                     $template.on('submit', function () {
                         scope.close();
                     });
+                });
+                scope.$on('fmDialogClose',function(){
+                    scope.close();
                 });
             }
         };

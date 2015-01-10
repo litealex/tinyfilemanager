@@ -14,6 +14,7 @@
                         var element = $(html);
                         fileManager(element[0], editor, {}, path);
                         element.modal();
+
                     }
                 });
             }

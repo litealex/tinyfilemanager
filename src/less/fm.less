@@ -5,8 +5,7 @@
   position: absolute;
   left: 0px;
   top: 0px;
-  background-repeat: no-repeat;
-  background-position: 0px -2px;
+  background: no-repeat 0px -2px;
 }
 
 .left-container {
@@ -35,13 +34,22 @@
       top: 2px;
     }
   }
-
 }
 
 .file-manager-container {
   height: 100%;
   position: relative;
-
+  .path {
+    padding-right: 80px;
+  }
+  .pull-right {
+    position: absolute;
+    right: 1px;
+    top: 7px;
+  }
+  .pull-right .btn {
+    margin-left: 5px;
+  }
 }
 
 .folders {
@@ -239,5 +247,4 @@
   height: 0;
   clear: both;
   visibility: hidden;
-
 }

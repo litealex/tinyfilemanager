@@ -112,7 +112,6 @@
         this.changeFrame = function (frame) {
             $rootScope.$broadcast('fmChangeFrame', frame);
         };
-        this.broadcast = $rootScope.$broadcast.bind($rootScope);
         this.copy = function (isMove) {
             this.isMove = isMove;
             this.pathFrom = this.files.path;
@@ -160,6 +159,8 @@
                 self.getFolders();
             });
         };
+
+        this.broadcast = $rootScope.$broadcast.bind($rootScope);
     }
 
     function toSimpleArray(files) {
