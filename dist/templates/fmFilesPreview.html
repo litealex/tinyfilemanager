@@ -1,0 +1,20 @@
+<div class="files-container"
+     >
+    <ul class="files-preview-list">
+        <li ng-repeat="file in files.list"
+            class="files-preview-file">
+            <label ng-click="file.selected = !file.selected"
+                   class="files-preview-label">
+                <i ng-if="file.selected"
+                   class="files-preview-icon glyphicon glyphicon-check"></i>
+
+                <div fm-file-prefix="{{files.path}}"
+                     fm-file="{{file.name}}"
+                     class="files-preview-wrapper"></div>
+                <div class="files-preview-title">
+                    {{file.name}}
+                </div>
+            </label>
+        </li>
+    </ul>
+</div>

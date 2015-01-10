@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="css/fm.min.css"/>
+    <style>
+        #holder {
+            height: 400px;
+        }
+    </style>
+</head>
+<body>
+<textarea name="" id="" cols="30" rows="10">
+
+</textarea>
+
+<script src="../bower_components/jquery/dist/jquery.min.js"></script>
+<script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="../bower_components/angular/angular.min.js"></script>
+<script src="../bower_components/tinymce/tinymce.min.js"></script>
+
+<script>
+    tinymce.init({
+        selector: 'textarea',
+        plugins: 'fm',
+        toolbar: 'FileManager',
+        fm_options:{
+            path: '/dist',
+            url: '/SimpleEditor.ashx'
+        },
+        external_plugins: { "fm" : "/dist/js/fm.min.js"}
+    });
+
+</script>
+</body>
+</html>

@@ -33,7 +33,11 @@
     tinymce.init({
         selector: 'textarea',
         plugins: 'fm',
-        toolbar: 'FileManager'
+        toolbar: 'FileManager',
+        fm_options: {
+            path: '/src',
+            url: '/SimpleEditor.ashx'
+        }
     });
 
 </script>

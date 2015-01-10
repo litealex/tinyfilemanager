@@ -1,0 +1,20 @@
+<div class="folder">
+    <span ng-click="load(folder.fullPath)"
+          ng-class="{'active-folder':isSelected(folder.fullPath)}"
+          class="folder">
+		<i ng-if="folder.folders.length"
+		   stop-event="click"
+		   ng-click="toggleCollapse()"
+		   ng-class="{
+           'folder-plus': isHide,
+           'folder-minus': !isHide
+           }"
+		   class="glyphicon"></i>
+        {{folder.name}}
+        
+    </span>
+
+    <div ng-if="!isHide" ng-repeat="subFolder in folder.folders"
+         fm-folders-tree="subFolder"
+         class="sub-folders"></div>
+</div>
