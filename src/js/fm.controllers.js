@@ -7,7 +7,7 @@
         .controller('FoldersController', ['$scope', 'foldersSrv', FoldersController])
         .controller('FilesController', ['$scope', 'filterFilter', 'foldersSrv', FilesController])
         .controller('MenuController', ['$scope', 'foldersSrv', MenuController])
-        .controller('InsertController', ['$scope', 'editor', 'foldersSrv', InsertController])
+        .controller('InsertController', ['$scope', 'foldersSrv', InsertController])
         .controller('UploadController', ['$scope', 'foldersSrv', UploadController]);
 
     function FoldersController($scope, foldersSrv) {
@@ -60,12 +60,10 @@
                         .join('/') + '/';
             foldersSrv.broadcast('fmChangePath', path);
         };
-
-
     }
 
     function MenuController($scope, foldersSrv) {
-    	$scope.menuUrl = foldersSrv.getTemplateUrl('fmMenu');
+        $scope.menuUrl = foldersSrv.getTemplateUrl('fmMenu');
         $scope.$on('fmFolderSelected', function () {
             $scope.isFolderSelected = true;
         });
@@ -124,9 +122,9 @@
         };
 
         $scope.pastFiles = function () {
-        	foldersSrv.past().then(function () {
-        		foldersSrv.refreshFolder();
-        	});
+            foldersSrv.past().then(function () {
+                foldersSrv.refreshFolder();
+            });
         };
 
         $scope.type = foldersSrv.getViewType();
@@ -144,19 +142,15 @@
 
     }
 
-    function InsertController($scope, editor, foldersSrv) {
+    function InsertController($scope, foldersSrv) {
         $scope.$on('fmFilesSelect', function (event, count) {
             $scope.filesSelectedCount = count;
         });
 
         $scope.insert = function () {
-            var imgs = [];
-            foldersSrv.selectedFiles.forEach(function (file) {
-                imgs.push('<img src="' + file.fullPath +
-                '" alt="' + file.name + '"/>');
-            });
-
-            editor.insertContent(imgs.join(''));
+            $scope.$emit('fmInsertFiles', foldersSrv.selectedFiles.map(function (file) {
+                return file.fullPath;
+            }));
         };
     }
 

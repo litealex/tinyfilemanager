@@ -2,7 +2,18 @@
     'use strict';
     angular.module('fm')
         .service('foldersSrv', ['$rootScope', '$http',
-            '$q', '$templateCache', 'fmCfg', FoldersSrv]);
+            '$q', '$templateCache', 'fmCfg', FoldersSrv])
+        .value('fmCfg', {
+            actionsUrl: '',
+            templatesPrefix:  '/templates/',
+            getTemplateUrl: function (template) {
+                return this.templatesPrefix + template + '.html';
+            },
+            imgExtensions: ['jpg', 'gif', 'png', 'jpeg', 'bmp', 'svg'],
+            extensionPrefix512:  '/img/512px/',
+            extensionPrefix32:  '/img/32px/',
+            viewType: 'list'
+        });
 
     function FoldersSrv($rootScope, $http, $q, $templateCache, fmCfg) {
         var self = this;
@@ -47,7 +58,8 @@
         this.getFolders = function () {
             return $http({
                 url: fmCfg.actionsUrl,
-                method: 'POST'
+                method: 'GET',
+                cache:false
             }).then(function (res) {
                 self.folders.tree = res.data;
                 return self.folders;
@@ -59,7 +71,8 @@
                 params: {
                     virtualpath: path
                 },
-                method: 'POST'
+                method: 'GET',
+                cache:false
             }).then(function (res) {
                 var files = self.files;
                 files.list = res.data.files;
@@ -170,3 +183,4 @@
     }
 
 }());
+

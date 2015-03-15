@@ -4,6 +4,7 @@
 (function () {
     'use strict';
     angular.module('fm')
+        .directive('fmManager', [fmManager])
         .directive('fmFoldersTree', ['$compile', '$parse', 'foldersSrv', fmFoldersTree])
         .directive('stopEvent', [stopEvent])
         .directive('fmDropFiles', ['$parse', '$compile', fmDropFiles])
@@ -12,6 +13,10 @@
         .directive('fmDialog', ['$compile', '$parse', 'foldersSrv', fmDialog])
         .directive('fmFileExt', ['fmCfg', fmFileExt])
         .directive('fmUploadFile', ['$parse', fmUploadFile]);
+
+
+    function fmManager(){}
+
 
     function fmFoldersTree($compile, $parse, foldersSrv) {
         return {
@@ -149,7 +154,7 @@
             scope: true,
             link: function (scope, element, attrs) {
                 var isVisible = false,
-                    $template = $('<div class="fm-dialog"></div>'),
+                    $template = angular.element('<div class="fm-dialog"></div>'),
                     parentOffseet = null;
 
                 if(attrs.fmDialogData) {
@@ -181,7 +186,7 @@
 
                                 }
                                 $template.html($compile(template)(scope)).css(element.offset());
-                                $('body').prepend($template).removeClass('modal-open');
+                                angular.element('body').prepend($template).removeClass('modal-open');
                                 isVisible = true;
                             });
                     }

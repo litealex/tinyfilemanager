@@ -30,6 +30,21 @@ module.exports = function (grunt) {
                             return './src/js/fm.' + file + '.js';
                         })
                 }
+            },
+            adm: {
+                options: {
+                    sourceMap: true
+                },
+                files: {
+                    './dist/js/fm.min.js': [
+                        'app',
+                        'services',
+                        'controllers',
+                        'directives'
+                    ].map(function (file) {
+                            return './src/js/fm.' + file + '.js';
+                        })
+                }
             }
         },
         jshint: {
@@ -53,7 +68,7 @@ module.exports = function (grunt) {
         watch: {
             dev: {
                 files: [lessSrc, jsSrc],
-                tasks: ['less:dev', 'jshint']
+                tasks: ['adm']
             }
         }
     });
@@ -65,6 +80,8 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-copy');
 
-    grunt.registerTask('default', ['watch']);
-    grunt.registerInitTask('dist', ['uglify', 'less:dist', 'copy']);
+    grunt.registerTask('default', ['watch:dev']);
+    grunt.registerTask('adm', ['uglify:dist', 'less:dist', 'copy'])
+    grunt.registerInitTask('dist', ['uglify:adm', 'less:dist', 'copy']);
+
 };
